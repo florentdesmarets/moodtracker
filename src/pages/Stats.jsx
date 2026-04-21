@@ -1,0 +1,87 @@
+import { useState, useEffect } from 'react'
+import AppHeader from '../components/AppHeader'
+import BgBlobs from '../components/BgBlobs'
+import { useLang } from '../context/LangContext'
+import { useMoods } from '../hooks/useMoods'
+
+function StatCard({ value, label }) {
+  return (
+    <div className="flex-1 bg-white/20 rounded-2xl p-3 text-center">
+      <p className="text-white font-extrabold text-[22px]">{value}</p>
+      <p className="text-white/80 text-[9px] font-semibold mt-0.5">{label}</p>
+    </div>
+  )
+}
+
+export default function Stats() {
+  const { t }                    = useLang()
+  const { fetchMonth, getStats } = useMoods()
+  const [moodsMap, setMoodsMap]  = useState({})
+  const [stats,    setStats]     = useState({ count: 0, avg: 0, positive: 0, topEmoji: '😐' })
+
+  useEffect(() => {
+    const today = new Date()
+    fetchMonth(today.getFullYear(), today.getMonth()).then(data => {
+      setMoodsMap(data); setStats(getStats(data))
+    })
+  }, [])
+
+  const today = new Date()
+  const pad = (n) => String(n).padStart(2, '0')
+
+  let streak = 0
+  for (let d = today.getDate(); d >= 1; d--) {
+    const dateStr = `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(d)}`
+    if (moodsMap[dateStr]) streak++; else break
+  }
+
+  // Données réelles des 7 derniers jours (lun → auj)
+  const weekDays = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(today)
+    d.setDate(today.getDate() - (6 - i))
+    const dateStr = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`
+    return { dateStr, niveau: moodsMap[dateStr]?.niveau ?? null, isToday: i === 6 }
+  })
+
+  return (
+    <div className="bg-app relative overflow-hidden flex flex-col px-6 pt-12 pb-8 min-h-[100dvh]">
+      <BgBlobs />
+      <AppHeader />
+      <div className="relative z-10 fade-in">
+        <h1 className="text-white font-extrabold text-[18px] text-center mb-4">{t('statsTitle')}</h1>
+        <div className="flex gap-2 mb-2">
+          <StatCard value={stats.count}           label={t('daysTracked')} />
+          <StatCard value={stats.topEmoji}        label={t('topMood')} />
+        </div>
+        <div className="flex gap-2">
+          <StatCard value={stats.positive + '%'}  label={t('positiveDays')} />
+          <StatCard value={streak}                label={t('streak')} />
+        </div>
+        {stats.avgSommeil !== null && (
+          <div className="flex gap-2 mt-2">
+            <StatCard value={`😴 ${stats.avgSommeil}h`} label={t('avgSleep')} />
+          </div>
+        )}
+        <div className="bg-white/12 rounded-2xl p-3 mt-3">
+          <p className="text-white text-[12px] font-bold mb-2">{t('thisWeek')}</p>
+          <div className="flex items-end gap-1.5 h-16">
+            {weekDays.map(({ niveau, isToday }, i) => (
+              <div key={i} className="flex-1 rounded-t-md"
+                style={{
+                  height: niveau !== null ? (niveau / 10 * 100) + '%' : '8%',
+                  background: niveau !== null
+                    ? (isToday ? 'rgba(255,255,255,0.88)' : 'rgba(255,255,255,0.5)')
+                    : 'rgba(255,255,255,0.15)',
+                  minHeight: '4px',
+                }}
+              />
+            ))}
+          </div>
+          <div className="flex justify-between mt-1">
+            {t('daysShort').map((d, i) => <span key={i} className="text-[8px] text-white/55">{d}</span>)}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

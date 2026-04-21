@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp /tmp/moodtracker-src/moodtracker-src/tailwind.config.js C:/Users/Florent/OneDrive/Bureau/dev/MoodTracker/MoodTrackerApp/moodtracker/tailwind.config.js)",
+      "Bash(cp /tmp/moodtracker-src/moodtracker-src/vite.config.js C:/Users/Florent/OneDrive/Bureau/dev/MoodTracker/MoodTrackerApp/moodtracker/vite.config.js)",
+      "Bash(cp /tmp/moodtracker-src/moodtracker-src/index.html C:/Users/Florent/OneDrive/Bureau/dev/MoodTracker/MoodTrackerApp/moodtracker/index.html)",
+      "Bash([ ! -f \"$MAIN/.env.local\" ])",
+      "Bash(cp /tmp/moodtracker-src/moodtracker-src/.env.local C:/Users/Florent/OneDrive/Bureau/dev/MoodTracker/MoodTrackerApp/moodtracker/.env.local)",
+      "Bash(git -C \"C:/Users/Florent/OneDrive/Bureau/dev/MoodTracker/MoodTrackerApp/moodtracker\" worktree remove --force \"C:/Users/Florent/OneDrive/Bureau/dev/MoodTracker/MoodTrackerApp/moodtracker/.claude/worktrees/focused-kare-e6b9ae\")",
+      "Read(//c/Users/Florent/OneDrive/Bureau/dev/MoodTracker/MoodTrackerApp/moodtracker/**)",
+      "Bash(npm install *)"
+    ]
+  }
+}

@@ -1,0 +1,92 @@
+import { useState, useCallback } from 'react'
+import { supabase } from '../lib/supabase'
+import { useAuth } from '../context/AuthContext'
+
+export function useMoods() {
+  const { user }   = useAuth()
+  const [loading, setLoading] = useState(false)
+
+  const fetchMonth = useCallback(async (year, month) => {
+    if (!user) return {}
+    setLoading(true)
+    const pad = (n) => String(n).padStart(2, '0')
+    const from = `${year}-${pad(month + 1)}-01`
+    const lastDay = new Date(year, month + 1, 0).getDate()
+    const to = `${year}-${pad(month + 1)}-${lastDay}`
+
+    const { data, error } = await supabase
+      .from('moods')
+      .select('*')
+      .eq('user_id', user.id)
+      .gte('date', from)
+      .lte('date', to)
+
+    setLoading(false)
+    if (error) { console.error(error); return {} }
+    const map = {}
+    data.forEach(row => { map[row.date] = row })
+    return map
+  }, [user])
+
+  const saveMood = useCallback(async ({ date, niveau, emoji, commentaire, sommeil }) => {
+    if (!user) return { error: 'Non connecté' }
+    const { data, error } = await supabase
+      .from('moods')
+      .upsert({
+        user_id: user.id,
+        date,
+        niveau,
+        emoji,
+        commentaire: commentaire || '',
+        sommeil: sommeil ?? null,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'user_id,date' })
+      .select()
+      .single()
+    return { data, error }
+  }, [user])
+
+  const deleteMood = useCallback(async (date) => {
+    if (!user) return { error: 'Non connecté' }
+    const { error } = await supabase
+      .from('moods')
+      .delete()
+      .eq('user_id', user.id)
+      .eq('date', date)
+    return { error }
+  }, [user])
+
+  const getStats = useCallback((moodsMap) => {
+    const entries = Object.values(moodsMap)
+    if (entries.length === 0) return { count: 0, avg: 0, positive: 0, topEmoji: '😐', avgSommeil: null }
+    const values = entries.map(m => m.niveau)
+    const avg = values.reduce((a, b) => a + b, 0) / values.length
+    const positive = values.filter(v => v >= 5).length
+    const positivePercent = Math.round((positive / values.length) * 100)
+    const freq = {}
+    entries.forEach(m => { freq[m.emoji] = (freq[m.emoji] || 0) + 1 })
+    const topEmoji = Object.entries(freq).sort((a, b) => b[1] - a[1])[0]?.[0] ?? '😐'
+    const sleepValues = entries.map(m => m.sommeil).filter(v => v != null)
+    const avgSommeil = sleepValues.length ? Math.round(sleepValues.reduce((a, b) => a + b, 0) / sleepValues.length * 10) / 10 : null
+    return { count: values.length, avg, positive: positivePercent, topEmoji, avgSommeil }
+  }, [])
+
+  const fetchGlobalStats = useCallback(async () => {
+    if (!user) return { count: 0, streak: 0 }
+    const { data } = await supabase
+      .from('moods').select('date').eq('user_id', user.id).order('date', { ascending: false })
+    if (!data || data.length === 0) return { count: 0, streak: 0 }
+    const count = data.length
+    const pad = (n) => String(n).padStart(2, '0')
+    const today = new Date()
+    let streak = 0
+    for (let i = 0; i < data.length; i++) {
+      const d = new Date(today); d.setDate(today.getDate() - i)
+      const dateStr = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`
+      if (data.some(m => m.date === dateStr)) streak++; else break
+    }
+    return { count, streak }
+  }, [user])
+
+  return { fetchMonth, saveMood, deleteMood, getStats, fetchGlobalStats, loading }
+}

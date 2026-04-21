@@ -1,0 +1,38 @@
+import { useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import AppHeader from '../components/AppHeader'
+import BgBlobs from '../components/BgBlobs'
+import { useLang } from '../context/LangContext'
+import { useMoods } from '../hooks/useMoods'
+
+export default function Thanks() {
+  const navigate    = useNavigate()
+  const location    = useLocation()
+  const { t }       = useLang()
+  const { saveMood } = useMoods()
+  const { level, emoji, commentaire, sommeil } = location.state ?? {}
+
+  useEffect(() => {
+    if (!level) return
+    const d = new Date()
+    const pad = (n) => String(n).padStart(2, '0')
+    const date = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`
+    saveMood({ date, niveau: level, emoji, commentaire: commentaire ?? '', sommeil: sommeil ?? null })
+  }, [])
+
+  return (
+    <div className="bg-app relative overflow-hidden flex flex-col px-6 pt-12 pb-8 min-h-[100dvh]">
+      <BgBlobs />
+      <AppHeader />
+      <div className="relative z-10 flex flex-col flex-1 items-center justify-center text-center fade-in">
+        <h1 className="text-white font-extrabold text-[21px] mb-2">{t('thanksTitle')}</h1>
+        <span className="text-[64px] heartbeat inline-block my-5">🩷</span>
+        <p className="text-white/80 text-[13px] mb-6">{t('thanksSub')}</p>
+        <button onClick={() => navigate('/calendar')}
+          className="px-6 py-2.5 rounded-full text-white font-bold text-[14px] bg-white/25 border-2 border-white/65 active:scale-[1.03] transition-transform">
+          {t('seeCalendar')}
+        </button>
+      </div>
+    </div>
+  )
+}
