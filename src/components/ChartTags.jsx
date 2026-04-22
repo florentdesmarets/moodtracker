@@ -5,6 +5,22 @@ const tagsFR = translations.fr.tags
 const tagsEN = translations.en.tags
 const EMOJIS = ['😭','😔','😕','😐','🙂','😊','😄']
 
+// Activités de réconfort : corrèlent avec les jours difficiles car utilisées
+// EN RÉPONSE à la difficulté, pas comme cause. Évite l'interprétation trompeuse.
+// Indices correspondant à la liste de tags (FR = EN = même ordre)
+const COPING_INDICES = new Set([
+  11, // Temps pour moi / Time for myself
+  12, // Pleuré·e / Cried
+  13, // Anxieux·se / Felt anxious
+  14, // Fatigué·e / Felt tired
+  16, // Médité·e / Meditated
+  17, // Lu un livre / Read a book
+  18, // Écouté de la musique / Listened to music
+  23, // Fait du yoga / Did yoga
+  24, // Joué à un jeu / Played a game
+  25, // Fait une sieste / Took a nap
+])
+
 function moodEmoji(avg) {
   return EMOJIS[Math.max(0, Math.min(6, Math.round(avg) - 1))]
 }
@@ -134,11 +150,19 @@ export default function ChartTags({ monthEntries, t, month, year }) {
   }
 
   const helps   = analysis.filter(s => s.impact >=  0.3)
-  const drains  = analysis.filter(s => s.impact <= -0.3)
-  const neutral = analysis.filter(s => Math.abs(s.impact) < 0.3)
-  const maxImpact = Math.max(...analysis.map(s => Math.abs(s.impact)), 0.5)
+  // Sépare les "vrais" drains des activités de réconfort (corrélées mais non causales)
+  const allDrains  = analysis.filter(s => s.impact <= -0.3)
+  const drains     = allDrains.filter(s => !COPING_INDICES.has(s.idx))
+  const comfort    = allDrains.filter(s =>  COPING_INDICES.has(s.idx))
+  const neutral    = analysis.filter(s => Math.abs(s.impact) < 0.3)
+  const maxImpact  = Math.max(...analysis.map(s => Math.abs(s.impact)), 0.5)
 
-  if (helps.length === 0 && drains.length === 0) return null
+  if (helps.length === 0 && drains.length === 0 && comfort.length === 0) return null
+
+  const comfortTitle = lang === 'fr' ? 'Activités de réconfort' : 'Comfort activities'
+  const comfortNote  = lang === 'fr'
+    ? 'Ces activités corrèlent avec les jours difficiles car tu les utilises pour te réconforter — pas comme cause.'
+    : 'These activities correlate with harder days because you turn to them for comfort — not as a cause.'
 
   return (
     <div className="bg-white/12 rounded-2xl p-4 mt-3">
@@ -159,13 +183,13 @@ export default function ChartTags({ monthEntries, t, month, year }) {
         </div>
       )}
 
-      {helps.length > 0 && drains.length > 0 && (
+      {helps.length > 0 && (drains.length > 0 || comfort.length > 0) && (
         <div className="border-t border-white/10 mb-4" />
       )}
 
-      {/* Section négative */}
+      {/* Section négative — vraies causes */}
       {drains.length > 0 && (
-        <div className="mb-3">
+        <div className={comfort.length > 0 ? 'mb-4' : 'mb-3'}>
           <p className="text-[9px] font-extrabold uppercase tracking-widest mb-3" style={{ color: '#fca5a5' }}>
             😔 {t('tagCorrelationDrains')}
           </p>
@@ -173,6 +197,21 @@ export default function ChartTags({ monthEntries, t, month, year }) {
             <TagRow key={item.idx} item={item} maxImpact={maxImpact} lang={lang} />
           ))}
         </div>
+      )}
+
+      {/* Section réconfort — corrélées mais non causales */}
+      {comfort.length > 0 && (
+        <details className="group mb-3" open={drains.length === 0}>
+          <summary className="cursor-pointer list-none flex items-center gap-1.5 text-[9px] font-extrabold uppercase tracking-widest select-none mb-1" style={{ color: '#c4b5fd' }}>
+            <span className="group-open:hidden">▸</span>
+            <span className="hidden group-open:inline">▾</span>
+            🤗 {comfortTitle}
+          </summary>
+          <p className="text-white/40 text-[9px] leading-relaxed mb-3 mt-1">{comfortNote}</p>
+          {[...comfort].reverse().map(item => (
+            <TagRow key={item.idx} item={item} maxImpact={maxImpact} lang={lang} />
+          ))}
+        </details>
       )}
 
       {/* Activités neutres — repliées */}
