@@ -37,7 +37,7 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
 
 // Génère le canvas et partage (ou télécharge en fallback)
 export async function shareBadge({ emoji, labelFull, desc, lang }) {
-  const W = 400, H = 560, DPR = 2
+  const W = 400, H = 620, DPR = 2
   const canvas = document.createElement('canvas')
   canvas.width  = W * DPR
   canvas.height = H * DPR
@@ -54,20 +54,27 @@ export async function shareBadge({ emoji, labelFull, desc, lang }) {
   // Blobs décoratifs (comme BgBlobs)
   ;[
     { x: 340, y: 90,  r: 120, a: 0.10 },
-    { x: 55,  y: 440, r: 95,  a: 0.07 },
-    { x: 200, y: 530, r: 55,  a: 0.05 },
+    { x: 55,  y: 500, r: 95,  a: 0.07 },
+    { x: 200, y: 600, r: 55,  a: 0.05 },
   ].forEach(({ x, y, r, a }) => {
     ctx.fillStyle = `rgba(255,255,255,${a})`
     ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill()
   })
 
+  // Layout vertical :
+  // Carte blanche  : y=32  → y=372  (h=340)
+  // Gap            : 20px
+  // QR zone        : y=392 → y=500  (h=108)
+  // Branding       : y=522 → y=560
+  // Marge bas      : 60px
+
   // ── Carte blanche avec ombre ─────────────────────────────────────
   ctx.save()
-  ctx.shadowColor    = 'rgba(180,60,0,0.18)'
-  ctx.shadowBlur     = 40
-  ctx.shadowOffsetY  = 14
-  ctx.fillStyle      = 'white'
-  roundRect(ctx, 28, 44, W - 56, 368, 28)
+  ctx.shadowColor   = 'rgba(180,60,0,0.18)'
+  ctx.shadowBlur    = 36
+  ctx.shadowOffsetY = 12
+  ctx.fillStyle     = 'white'
+  roundRect(ctx, 28, 32, W - 56, 340, 28)
   ctx.fill()
   ctx.restore()
 
@@ -76,52 +83,54 @@ export async function shareBadge({ emoji, labelFull, desc, lang }) {
   bannerGrad.addColorStop(0, '#FFB347')
   bannerGrad.addColorStop(1, '#FF7040')
   ctx.fillStyle = bannerGrad
-  roundRect(ctx, 28, 44, W - 56, 52, 28)
+  roundRect(ctx, 28, 32, W - 56, 50, 28)
   ctx.fill()
-  ctx.fillRect(28, 68, W - 56, 28)   // coins bas carrés
+  ctx.fillRect(28, 56, W - 56, 26)   // coins bas carrés
 
   ctx.font         = 'bold 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
   ctx.fillStyle    = 'white'
   ctx.textAlign    = 'center'
   ctx.textBaseline = 'middle'
-  ctx.fillText(lang === 'fr' ? '🏅  Badge débloqué !' : '🏅  Badge unlocked!', W / 2, 70)
+  ctx.fillText(lang === 'fr' ? '🏅  Badge débloqué !' : '🏅  Badge unlocked!', W / 2, 57)
 
   // ── Grand emoji ──────────────────────────────────────────────────
-  ctx.font         = '78px serif'
+  ctx.font         = '76px serif'
   ctx.textAlign    = 'center'
   ctx.textBaseline = 'alphabetic'
-  ctx.fillText(emoji, W / 2, 200)
+  ctx.fillText(emoji, W / 2, 185)
 
   // ── Nom du badge (sans l'emoji préfixe) ──────────────────────────
-  const cleanLabel = labelFull.replace(/^\S+\s+/, '').trim()  // "🌱 Débutant·e" → "Débutant·e"
-  ctx.font      = 'bold 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
-  ctx.fillStyle = '#FF7040'
-  ctx.textAlign = 'center'
+  const cleanLabel = labelFull.replace(/^\S+\s+/, '').trim()
+  ctx.font         = 'bold 22px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+  ctx.fillStyle    = '#FF7040'
+  ctx.textAlign    = 'center'
   ctx.textBaseline = 'alphabetic'
-  ctx.fillText(cleanLabel, W / 2, 252)
+  ctx.fillText(cleanLabel, W / 2, 234)
 
   // ── Description ──────────────────────────────────────────────────
   ctx.font      = '13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
   ctx.fillStyle = '#aaa'
   ctx.textAlign = 'center'
-  wrapText(ctx, desc, W / 2, 278, 300, 20)
+  wrapText(ctx, desc, W / 2, 260, 300, 20)
 
   // ── Séparateur ───────────────────────────────────────────────────
   ctx.strokeStyle = '#f0e8e0'
   ctx.lineWidth   = 1
   ctx.beginPath()
-  ctx.moveTo(60, 330); ctx.lineTo(W - 60, 330); ctx.stroke()
+  ctx.moveTo(60, 310); ctx.lineTo(W - 60, 310); ctx.stroke()
 
   ctx.font      = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
   ctx.fillStyle = '#ccc'
   ctx.textAlign = 'center'
   ctx.fillText(
     lang === 'fr' ? 'Suivi émotionnel quotidien' : 'Daily emotional tracking',
-    W / 2, 352
+    W / 2, 348
   )
+  // Carte se termine à y = 32 + 340 = 372
 
-  // ── QR code ──────────────────────────────────────────────────────
-  const qrSize = 88
+  // ── QR code (clairement sous la carte) ───────────────────────────
+  const qrSize = 84
+  const qrY    = 392   // 20px sous la carte
   try {
     const qrUrl = await QRCode.toDataURL(APP_URL, {
       width:  qrSize * DPR,
@@ -131,25 +140,27 @@ export async function shareBadge({ emoji, labelFull, desc, lang }) {
     const qrImg = new Image()
     await new Promise((res, rej) => { qrImg.onload = res; qrImg.onerror = rej; qrImg.src = qrUrl })
 
-    // Fond blanc derrière le QR
+    // Fond blanc arrondi derrière le QR
+    const pad = 12
     ctx.fillStyle = 'rgba(255,255,255,0.95)'
-    roundRect(ctx, (W - qrSize - 20) / 2, 386, qrSize + 20, qrSize + 20, 16)
+    roundRect(ctx, (W - qrSize - pad * 2) / 2, qrY - pad, qrSize + pad * 2, qrSize + pad * 2, 16)
     ctx.fill()
-    ctx.drawImage(qrImg, (W - qrSize) / 2, 396, qrSize, qrSize)
+    ctx.drawImage(qrImg, (W - qrSize) / 2, qrY, qrSize, qrSize)
   } catch { /* QR optionnel */ }
 
   // ── Branding bas de page ─────────────────────────────────────────
+  // qrY + qrSize + pad*2 = 392 + 84 + 24 = 500 → branding à partir de 520
   ctx.font         = 'bold 19px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
   ctx.fillStyle    = 'white'
   ctx.textAlign    = 'center'
   ctx.textBaseline = 'alphabetic'
-  ctx.fillText('🩷 MoodTracker', W / 2, 502)
+  ctx.fillText('🩷 MoodTracker', W / 2, 534)
 
   ctx.font      = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
   ctx.fillStyle = 'rgba(255,255,255,0.65)'
   ctx.fillText(
     lang === 'fr' ? 'Scanne le QR code pour rejoindre' : 'Scan the QR code to join',
-    W / 2, 522
+    W / 2, 556
   )
 
   // ── Partage ou téléchargement fallback ───────────────────────────
