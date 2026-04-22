@@ -17,10 +17,6 @@ export const BADGES = [
   { id: 'entries200',     emoji: '📖', labelKey: 'badgeEntries200',     descKey: 'badgeEntries200Desc' },
   { id: 'entries365',     emoji: '🎯', labelKey: 'badgeEntries365',     descKey: 'badgeEntries365Desc' },
 
-  // ── Humeur positive ───────────────────────────────────────────
-  { id: 'positiveStreak7', emoji: '☀️', labelKey: 'badgePositiveStreak7', descKey: 'badgePositiveStreak7Desc' },
-  { id: 'positiveDays30',  emoji: '🌤️', labelKey: 'badgePositiveDays30',  descKey: 'badgePositiveDays30Desc' },
-
   // ── Journal ───────────────────────────────────────────────────
   { id: 'commentator',    emoji: '📝', labelKey: 'badgeCommentator',    descKey: 'badgeCommentatorDesc' },
   { id: 'writer',         emoji: '💌', labelKey: 'badgeWriter',         descKey: 'badgeWriterDesc' },
@@ -50,8 +46,6 @@ export function computeBadges({ streak, count, positiveStreak, positiveDaysCount
       b.id === 'entries100'       ? count >= 100 :
       b.id === 'entries200'       ? count >= 200 :
       b.id === 'entries365'       ? count >= 365 :
-      b.id === 'positiveStreak7'  ? positiveStreak >= 7 :
-      b.id === 'positiveDays30'   ? positiveDaysCount >= 30 :
       b.id === 'commentator'      ? commentCount >= 20 :
       b.id === 'writer'           ? longCommentCount >= 10 :
       b.id === 'goodSleeper'      ? goodSleepCount >= 15 :
