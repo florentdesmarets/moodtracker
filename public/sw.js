@@ -1,4 +1,4 @@
-const CACHE = 'moodtracker-v1'
+const CACHE = 'moodtracker-1.1.0'
 const PRECACHE = ['/', '/index.html']
 
 let notifTimer = null
