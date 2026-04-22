@@ -19,12 +19,23 @@ export default function PWAInstallBanner() {
 
   useEffect(() => {
     if (dismissed || isInStandalone()) return
+
     if (isIOS()) {
       setShowIOS(true)
       return
     }
+
+    // L'event a peut-être déjà été capturé avant que React monte (dans index.html)
+    if (window.__pwaInstallPrompt) {
+      setDeferredPrompt(window.__pwaInstallPrompt)
+      setShowAndroid(true)
+      return
+    }
+
+    // Sinon on écoute s'il arrive plus tard
     const handler = (e) => {
       e.preventDefault()
+      window.__pwaInstallPrompt = e
       setDeferredPrompt(e)
       setShowAndroid(true)
     }
@@ -43,6 +54,7 @@ export default function PWAInstallBanner() {
     if (!deferredPrompt) return
     deferredPrompt.prompt()
     const { outcome } = await deferredPrompt.userChoice
+    window.__pwaInstallPrompt = null
     if (outcome === 'accepted') dismiss()
     else setDeferredPrompt(null)
     setShowAndroid(false)
@@ -51,7 +63,7 @@ export default function PWAInstallBanner() {
   if (dismissed || (!showAndroid && !showIOS)) return null
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 max-w-[430px] mx-auto px-4 pb-5 fade-in">
+    <div className="fixed bottom-0 left-0 right-0 z-[70] max-w-[430px] mx-auto px-4 pb-5 fade-in">
       <div className="bg-white rounded-2xl shadow-xl p-4">
         <div className="flex items-start gap-3">
           <span className="text-[32px]">📲</span>
@@ -66,7 +78,7 @@ export default function PWAInstallBanner() {
               </p>
             )}
           </div>
-          <button onClick={dismiss} className="text-[#ccc] text-[18px] font-bold bg-transparent border-none cursor-pointer leading-none">×</button>
+          <button onClick={dismiss} className="text-[#ccc] text-[20px] font-bold bg-transparent border-none cursor-pointer leading-none">×</button>
         </div>
         {showAndroid && (
           <div className="flex gap-2 mt-3">

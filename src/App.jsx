@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { LangProvider }          from './context/LangContext'
 import { ThemeProvider }         from './context/ThemeContext'
+import PWAInstallBanner from './components/PWAInstallBanner'
 import Welcome      from './pages/Welcome'
 import Login        from './pages/Login'
 import Register     from './pages/Register'
@@ -37,6 +38,7 @@ export default function App() {
       <ThemeProvider>
       <LangProvider>
         <BrowserRouter basename="/moodtracker">
+          <PWAInstallBanner />
           <Routes>
             <Route path="/"         element={<PublicRoute><Welcome /></PublicRoute>} />
             <Route path="/login"    element={<PublicRoute><Login /></PublicRoute>} />

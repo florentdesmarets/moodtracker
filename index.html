@@ -8,8 +8,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="MoodTracker" />
-    <link rel="manifest" href="/manifest.json" />
     <title>MoodTracker</title>
+    <link rel="manifest" href="%BASE_URL%manifest.json" />
     <script>
       // Restore SPA route redirected from 404.html
       ;(function(l) {
@@ -19,6 +19,11 @@
             l.pathname.slice(0, -1) + decoded[0] + (decoded[1] ? '?' + decoded[1] : '') + l.hash)
         }
       }(window.location))
+      // Capture l'event PWA AVANT que React monte (il peut arriver très tôt)
+      window.addEventListener('beforeinstallprompt', function(e) {
+        e.preventDefault()
+        window.__pwaInstallPrompt = e
+      })
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => navigator.serviceWorker.register('%BASE_URL%sw.js'))
       }
