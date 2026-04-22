@@ -13,15 +13,12 @@ body {
   font-family: 'Nunito', sans-serif;
   margin: 0;
   padding: 0;
-  background: #1a1a1a;
-  display: flex;
-  justify-content: center;
+  background: var(--bg-gradient, linear-gradient(160deg, #FFD07A 0%, #FF8C5A 60%, #FF6B5A 100%));
   min-height: 100vh;
 }
 
 #root {
   width: 100%;
-  max-width: 430px;
 }
 
 :root {
