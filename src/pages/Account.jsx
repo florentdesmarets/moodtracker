@@ -10,6 +10,7 @@ import { translations } from '../context/LangContext'
 import { BADGES, computeBadges, getAvatar } from '../lib/badges'
 import { useTheme } from '../context/ThemeContext'
 import { requestNotificationPermission, isNotificationGranted, scheduleNotification, cancelNotification } from '../hooks/useNotifications'
+import { shareBadge } from '../lib/shareBadge'
 
 function Toggle({ checked, onChange }) {
   return (
@@ -101,13 +102,12 @@ export default function Account() {
   }
 
   async function handleShare(badge) {
-    const text = t('shareBadgeText')(t(badge.labelKey), 'MoodTracker')
-    if (navigator.share) {
-      await navigator.share({ title: 'MoodTracker', text })
-    } else {
-      await navigator.clipboard.writeText(text)
-      alert('Copié dans le presse-papier !')
-    }
+    await shareBadge({
+      emoji:     badge.emoji,
+      labelFull: t(badge.labelKey),
+      desc:      t(badge.descKey),
+      lang,
+    })
   }
 
   async function handleLogout() { await signOut(); navigate('/') }
