@@ -5,18 +5,10 @@ const tagsFR = translations.fr.tags
 const tagsEN = translations.en.tags
 const EMOJIS = ['😭','😔','😕','😐','🙂','😊','😄']
 
-// États émotionnels/conséquences : exclus de l'analyse — ce sont des symptômes,
-// pas des activités indépendantes. Les montrer fausserait toute l'analyse.
-const EXCLUDE_INDICES = new Set([
-   2, // Mal dormi·e / Slept badly  → conséquence, pas cause
-  12, // Pleuré·e / Cried           → état émotionnel
-  13, // Anxieux·se / Felt anxious  → état émotionnel
-  14, // Fatigué·e / Felt tired     → état/conséquence
-])
-
 // Activités de réconfort : choisies EN RÉPONSE à un jour difficile, pas comme cause.
 // Affichées sans score négatif, avec un message contextualisé.
 const COPING_INDICES = new Set([
+  10, // Vu des ami·es / Saw friends   → réconfortant, pas causal
   11, // Temps pour moi / Time for myself
   16, // Médité·e / Meditated
   17, // Lu un livre / Read a book
@@ -129,9 +121,6 @@ export default function ChartTags({ monthEntries, t, month, year }) {
     if (!monthEntries || monthEntries.length < 3) return null
 
     const results = tagsFR.map((_, idx) => {
-      // Exclure les états émotionnels — ce sont des symptômes, pas des activités
-      if (EXCLUDE_INDICES.has(idx)) return null
-
       const withTag    = monthEntries.filter(m => hasTag(m.commentaire, idx))
       const withoutTag = monthEntries.filter(m => !hasTag(m.commentaire, idx))
 
