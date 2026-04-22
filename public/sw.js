@@ -1,4 +1,4 @@
-const CACHE = 'moody-1.2.0'
+const CACHE = 'moody-1.2.1'
 const PRECACHE = ['/moodtracker/', '/moodtracker/index.html']
 
 let notifTimer = null
