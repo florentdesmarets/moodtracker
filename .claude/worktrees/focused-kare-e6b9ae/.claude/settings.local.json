@@ -11,7 +11,13 @@
       "Bash(npm install *)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(gh repo *)",
+      "Bash(sed -i 's|florentdesmarets.github.io/moodtracker/|florentdesmarets.github.io/moody/|g' src/lib/shareBadge.js src/pages/About.jsx)",
+      "Bash(sed -i 's|badge-moodtracker|badge-moody|g' src/lib/shareBadge.js)",
+      "Bash(sed -i 's|florentdesmarets.github.io/moodtracker/|florentdesmarets.github.io/moody/|g' README.md)",
+      "Bash(sed -i 's|florentdesmarets/moodtracker|florentdesmarets/moody|g' README.md)",
+      "Bash(sed -i 's|^cd moodtracker|cd moody|g' README.md)"
     ]
   }
 }

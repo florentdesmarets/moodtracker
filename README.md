@@ -2,7 +2,7 @@
 
 > Une application de suivi émotionnel bienveillante, conçue pour aider à mieux se comprendre au quotidien.
 
-**[→ Voir l'application](https://florentdesmarets.github.io/moodtracker/)**
+**[→ Voir l'application](https://florentdesmarets.github.io/moody/)**
 
 ---
 
@@ -84,8 +84,8 @@ Ce n'est pas une startup. C'est un projet personnel, fait avec soin, proposé gr
 ### Installation
 
 ```bash
-git clone https://github.com/florentdesmarets/moodtracker.git
-cd moodtracker
+git clone https://github.com/florentdesmarets/moody.git
+cd moody
 npm install
 ```
 
@@ -159,7 +159,7 @@ Moody est gratuit et open-source. Si l'app t'aide et que tu souhaites participer
 
 Si tu penses que Moody peut aider quelqu'un autour de toi, n'hésite pas à le partager !
 
-**https://florentdesmarets.github.io/moodtracker/**
+**https://florentdesmarets.github.io/moody/**
 
 ---
 

@@ -1,6 +1,6 @@
 import QRCode from 'qrcode'
 
-const APP_URL = 'https://florentdesmarets.github.io/moodtracker/'
+const APP_URL = 'https://florentdesmarets.github.io/moody/'
 
 // Arrondi des coins compatible tous navigateurs
 function roundRect(ctx, x, y, w, h, r) {
@@ -167,7 +167,7 @@ export async function shareBadge({ emoji, labelFull, desc, lang }) {
   return new Promise(resolve => {
     canvas.toBlob(async blob => {
       if (!blob) { resolve(false); return }
-      const file = new File([blob], 'badge-moodtracker.png', { type: 'image/png' })
+      const file = new File([blob], 'badge-moody.png', { type: 'image/png' })
 
       if (navigator.canShare?.({ files: [file] })) {
         try {
@@ -188,7 +188,7 @@ export async function shareBadge({ emoji, labelFull, desc, lang }) {
 function downloadBlob(blob) {
   const url = URL.createObjectURL(blob)
   const a   = document.createElement('a')
-  a.href = url; a.download = 'badge-moodtracker.png'
+  a.href = url; a.download = 'badge-moody.png'
   document.body.appendChild(a); a.click()
   document.body.removeChild(a); URL.revokeObjectURL(url)
 }
