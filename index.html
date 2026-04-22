@@ -4,14 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="theme-color" content="#FF8C5A" />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='50%' y='58%' text-anchor='middle' dominant-baseline='middle' font-size='72'>😊</text></svg>">    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <meta name="description" content="Moody — Journal émotionnel quotidien bienveillant. Suivi de l'humeur, du sommeil et des activités. Outil d'aide personnel — ne remplace pas un avis médical." />
+    <meta name="keywords" content="journal émotionnel, suivi humeur, trouble bipolaire, santé mentale, bien-être" />
+    <meta property="og:title" content="Moody — Journal émotionnel" />
+    <meta property="og:description" content="Suis ton humeur jour après jour avec bienveillance. Outil d'aide personnel — consultez toujours un professionnel de santé." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='50%' y='58%' text-anchor='middle' dominant-baseline='middle' font-size='72'>😊</text></svg>">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="MoodTracker" />
-    <title>MoodTracker</title>
+    <meta name="apple-mobile-web-app-title" content="Moody" />
+    <title>Moody — Journal émotionnel</title>
     <link rel="manifest" href="%BASE_URL%manifest.json" />
     <script>
-      // Restore SPA route redirected from 404.html
       ;(function(l) {
         if (l.search[1] === '/') {
           var decoded = l.search.slice(1).split('&').map(function(s) { return s.replace(/~and~/g, '&') })
@@ -19,7 +24,6 @@
             l.pathname.slice(0, -1) + decoded[0] + (decoded[1] ? '?' + decoded[1] : '') + l.hash)
         }
       }(window.location))
-      // Capture l'event PWA AVANT que React monte (il peut arriver très tôt)
       window.addEventListener('beforeinstallprompt', function(e) {
         e.preventDefault()
         window.__pwaInstallPrompt = e

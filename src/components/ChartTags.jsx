@@ -18,6 +18,9 @@ const COPING_INDICES = new Set([
   25, // Fait une sieste / Took a nap
 ])
 
+// États qui sont des conséquences, jamais des causes — exclus de l'analyse
+const EXCLUDE_INDICES = new Set([2]) // Mal dormi·e / Slept badly
+
 function moodEmoji(avg) {
   return EMOJIS[Math.max(0, Math.min(6, Math.round(avg) - 1))]
 }
@@ -121,6 +124,7 @@ export default function ChartTags({ monthEntries, t, month, year }) {
     if (!monthEntries || monthEntries.length < 3) return null
 
     const results = tagsFR.map((_, idx) => {
+      if (EXCLUDE_INDICES.has(idx)) return null
       const withTag    = monthEntries.filter(m => hasTag(m.commentaire, idx))
       const withoutTag = monthEntries.filter(m => !hasTag(m.commentaire, idx))
 

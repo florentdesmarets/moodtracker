@@ -1,14 +1,18 @@
-# 🩷 MoodTracker
+# 🩷 Moody — Journal émotionnel bienveillant
 
-> Une application de suivi émotionnel, conçue avec amour pour accompagner les personnes vivant avec un trouble bipolaire.
+> Une application de suivi émotionnel bienveillante, conçue pour aider à mieux se comprendre au quotidien.
 
 **[→ Voir l'application](https://florentdesmarets.github.io/moodtracker/)**
 
 ---
 
+> ⚕️ **Avertissement médical** — Moody est un outil de suivi émotionnel personnel. Il ne remplace en aucun cas l'avis d'un médecin, d'un psychologue ou de tout autre professionnel de santé. En cas de détresse, contacte un professionnel qualifié.
+
+---
+
 ## 💡 Pourquoi ce projet ?
 
-J'ai créé MoodTracker pour ma compagne, qui vit avec un trouble bipolaire. Suivre ses émotions au quotidien l'aide à mieux se connaître, à anticiper les crises, et à partager un historique concret avec son médecin.
+J'ai créé Moody pour une personne qui m'est chère. Suivre ses émotions au quotidien l'aide à mieux se connaître, à anticiper les moments difficiles, et à partager un historique concret avec son médecin.
 
 Ce n'est pas une startup. C'est un projet personnel, fait avec soin, proposé gratuitement à toute personne qui pourrait en avoir besoin.
 
@@ -18,35 +22,37 @@ Ce n'est pas une startup. C'est un projet personnel, fait avec soin, proposé gr
 
 ### 📊 Suivi quotidien
 - Sélection de l'humeur via 7 emojis (du plus difficile au plus heureux)
-- Journal libre avec tags prédéfinis (activités, ressentis)
-- Suivi du sommeil chaque jour
+- Mode positif pour les jours à polarité mixte
+- Journal libre avec tags prédéfinis (30 activités & ressentis)
+- Suivi du sommeil, de l'alimentation et de l'énergie
 
 ### 📅 Historique
 - Calendrier mensuel coloré selon l'humeur
 - Modification d'une entrée passée directement depuis le calendrier
 
 ### 📈 Statistiques & graphiques
-- Vue hebdomadaire (semaine calendaire lun → dim)
 - Graphique mensuel humeur + sommeil croisés
-- Corrélation sommeil / humeur
+- Corrélation activités / humeur : ce qui aide, ce qui affecte, activités de réconfort
 - Streak, jours suivis, humeur fréquente, % positifs
 
 ### 🏆 Badges & avatars
 - Système de progression (débutant → légende)
 - Avatars débloquables selon les badges obtenus
-- Partage d'un badge via le Web Share API
+- Partage d'un badge via une image générée (canvas + Web Share API)
 
 ### 🆘 Mode crise
 - Numéros d'urgence accessibles en un clic (3114, 15, 17, 112)
-- Contact de confiance personnel enregistré dans le compte
-- Liens vers des ressources officielles (psycom.org, 3114.fr…)
+- Exercice de respiration (cohérence cardiaque 5s/5s)
+- Ancrage sensoriel guidé (5-4-3-2-1)
+- Contact de confiance personnel
 
 ### 🎨 Personnalisation
-- 8 thèmes de couleurs (Coucher de soleil, Lavande, Océan, Rose, Forêt, Nuit, Aurore boréale, Pêche dorée)
+- 8 thèmes de couleurs
 - Interface disponible en **français** et **anglais**
+- Version desktop avec panneau décoratif
 
 ### 📄 Export
-- Rapport mensuel PDF — humeur & sommeil croisés sur un graphique, adapté pour un suivi médical
+- Rapport mensuel PDF avec graphiques et analyse des activités
 
 ### 🔔 Notifications
 - Rappel quotidien à l'heure choisie (PWA, Android & iOS 16.4+)
@@ -121,8 +127,11 @@ npm run dev
 | date | date | Date de l'entrée |
 | niveau | int | Humeur de 1 à 7 |
 | emoji | text | Emoji correspondant |
-| commentaire | text | Texte libre / tags |
+| commentaire | text | Tags activités (séparés par `, `) |
 | sommeil | float | Heures de sommeil |
+| nourriture | int | Alimentation 1–3 |
+| fatigue | int | Énergie 1–3 |
+| note | text | Note libre |
 
 ---
 
@@ -138,10 +147,26 @@ Le déploiement est automatisé via GitHub Actions à chaque push sur `main`.
 
 ---
 
+## 💙 Soutenir le projet
+
+Moody est gratuit et open-source. Si l'app t'aide et que tu souhaites participer aux frais d'hébergement :
+
+👉 [PayPal — florentdesmarets](https://paypal.me/florentdesmarets)
+
+---
+
+## 📲 Partager l'app
+
+Si tu penses que Moody peut aider quelqu'un autour de toi, n'hésite pas à le partager !
+
+**https://florentdesmarets.github.io/moodtracker/**
+
+---
+
 ## 🙏 À propos
 
 Fait avec ❤️ par **Florent Desmarets** — projet non lucratif, open source.
 
-Si cette application t'aide, toi ou un proche, c'est tout ce qui compte.
+Si cette application aide ne serait-ce qu'une personne, c'est tout ce qui compte.
 
 > *"Tu n'as pas à aller bien tout le temps."*

@@ -26,8 +26,8 @@ export const THEMES = [
   {
     id: 'rose',
     // Rose → changed to deep plum/magenta to avoid clash with red mood colors in calendar
-    label: '🌸 Rose',
-    labelEn: '🌸 Rose',
+    label: '✨ Fuchsia',
+    labelEn: '✨ Fuchsia',
     gradient: 'linear-gradient(160deg, #f5d0fe 0%, #a21caf 60%, #86198f 100%)',
     drawer: 'rgba(134,25,143,0.97)',
     blob1: '#f0abfc', blob2: '#d946ef', blob3: '#f5d0fe',
@@ -35,8 +35,8 @@ export const THEMES = [
   {
     id: 'forest',
     // Forest → changed to teal/cyan to avoid clash with green mood colors in calendar
-    label: '🌿 Forêt',
-    labelEn: '🌿 Forest',
+    label: '🪨 Jade',
+    labelEn: '🪨 Jade',
     gradient: 'linear-gradient(160deg, #99f6e4 0%, #0d9488 60%, #0f766e 100%)',
     drawer: 'rgba(15,118,110,0.97)',
     blob1: '#5eead4', blob2: '#14b8a6', blob3: '#99f6e4',

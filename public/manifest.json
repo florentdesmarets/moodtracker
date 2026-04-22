@@ -1,7 +1,7 @@
 {
-  "name": "MoodTracker",
-  "short_name": "MoodTracker",
-  "description": "Suis ton humeur chaque jour",
+  "name": "Moody",
+  "short_name": "Moody",
+  "description": "Journal émotionnel bienveillant",
   "start_url": "/moodtracker/",
   "scope": "/moodtracker/",
   "display": "standalone",

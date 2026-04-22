@@ -154,7 +154,7 @@ export async function shareBadge({ emoji, labelFull, desc, lang }) {
   ctx.fillStyle    = 'white'
   ctx.textAlign    = 'center'
   ctx.textBaseline = 'alphabetic'
-  ctx.fillText('🩷 MoodTracker', W / 2, 534)
+  ctx.fillText('🩷 Moody', W / 2, 534)
 
   ctx.font      = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
   ctx.fillStyle = 'rgba(255,255,255,0.65)'
