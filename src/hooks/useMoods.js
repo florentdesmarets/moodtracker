@@ -133,5 +133,16 @@ export function useMoods() {
     return { count, streak, commentCount, longCommentCount, goodSleepCount, wellFedCount, notTiredCount, hardDaysCount, thoroughCount }
   }, [user])
 
-  return { fetchMonth, saveMood, deleteMood, getStats, fetchGlobalStats, loading }
+  const fetchAllMoods = useCallback(async () => {
+    if (!user) return []
+    const { data, error } = await supabase
+      .from('moods')
+      .select('date, niveau, commentaire, sommeil, nourriture, fatigue')
+      .eq('user_id', user.id)
+      .order('date', { ascending: true })
+    if (error || !data) return []
+    return data
+  }, [user])
+
+  return { fetchMonth, saveMood, deleteMood, getStats, fetchGlobalStats, fetchAllMoods, loading }
 }
