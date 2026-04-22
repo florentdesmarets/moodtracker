@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Réinitialisation de ton mot de passe – Moody</title>
+</head>
+<body style="margin:0;padding:0;background:#f5f0eb;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f0eb;padding:32px 0;">
+    <tr>
+      <td align="center">
+
+        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;border-radius:24px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.10);">
+
+          <!-- Header -->
+          <tr>
+            <td style="background:linear-gradient(145deg,#FFD07A 0%,#FF8C5A 55%,#FF6B5A 100%);padding:44px 40px 36px;text-align:center;">
+              <div style="font-size:52px;line-height:1;margin-bottom:12px;">🔑</div>
+              <div style="font-size:28px;font-weight:900;color:#fff;letter-spacing:-0.5px;margin-bottom:4px;">Moody</div>
+              <div style="font-size:13px;color:rgba(255,255,255,0.80);font-weight:600;letter-spacing:0.5px;text-transform:uppercase;">Réinitialisation du mot de passe</div>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="background:#ffffff;padding:40px 40px 32px;">
+
+              <p style="font-size:22px;font-weight:800;color:#1a1a1a;margin:0 0 8px;">Tu as demandé un nouveau mot de passe 🔐</p>
+              <p style="font-size:15px;color:#555;line-height:1.6;margin:0 0 28px;">
+                Pas de panique — ça arrive à tout le monde ! Clique sur le bouton ci-dessous pour choisir un nouveau mot de passe. Ce lien est valable <strong>1 heure</strong>.
+              </p>
+
+              <!-- CTA -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:36px;">
+                <tr>
+                  <td align="center">
+                    <a href="{{ .ConfirmationURL }}"
+                       style="display:inline-block;background:linear-gradient(135deg,#FF8C5A,#FF6B5A);color:#fff;font-size:16px;font-weight:800;text-decoration:none;padding:16px 40px;border-radius:999px;letter-spacing:0.2px;box-shadow:0 4px 16px rgba(255,107,90,0.40);">
+                      🔐 Choisir un nouveau mot de passe
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Divider -->
+              <hr style="border:none;border-top:1px solid #f0e8e0;margin:0 0 28px;" />
+
+              <!-- Sécurité -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:0;">
+
+                <tr>
+                  <td style="padding:0 0 16px;">
+                    <table cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="font-size:26px;vertical-align:top;padding-right:14px;line-height:1;">⏱️</td>
+                        <td>
+                          <p style="font-size:14px;font-weight:800;color:#1a1a1a;margin:0 0 2px;">Le lien expire dans 1 heure</p>
+                          <p style="font-size:13px;color:#777;margin:0;line-height:1.5;">Passé ce délai, il faudra refaire une demande depuis l'application.</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="padding:0 0 16px;">
+                    <table cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="font-size:26px;vertical-align:top;padding-right:14px;line-height:1;">🛡️</td>
+                        <td>
+                          <p style="font-size:14px;font-weight:800;color:#1a1a1a;margin:0 0 2px;">Tu n'as pas demandé ça ?</p>
+                          <p style="font-size:13px;color:#777;margin:0;line-height:1.5;">Ignore simplement cet email. Ton mot de passe actuel ne sera pas modifié.</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="padding:0;">
+                    <table cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="font-size:26px;vertical-align:top;padding-right:14px;line-height:1;">💡</td>
+                        <td>
+                          <p style="font-size:14px;font-weight:800;color:#1a1a1a;margin:0 0 2px;">Conseil pour un bon mot de passe</p>
+                          <p style="font-size:13px;color:#777;margin:0;line-height:1.5;">Au moins 8 caractères, avec des chiffres et des lettres. Évite les dates de naissance ou prénoms.</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+              </table>
+
+              <!-- Note douce -->
+              <div style="background:#fff8f5;border:1px solid #ffd5c0;border-radius:12px;padding:16px 18px;margin-top:32px;text-align:center;">
+                <p style="font-size:14px;color:#FF8C5A;font-weight:800;margin:0 0 4px;">🩷 On est là pour toi</p>
+                <p style="font-size:13px;color:#999;margin:0;line-height:1.6;">Moody sera toujours là pour t'accompagner, jour après jour.<br />Tu n'as pas à aller bien tout le temps.</p>
+              </div>
+
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background:#faf6f3;padding:24px 40px;text-align:center;border-top:1px solid #f0e8e0;">
+              <p style="font-size:12px;color:#bbb;margin:0 0 6px;">
+                Tu reçois cet email car tu as demandé une réinitialisation de mot de passe sur
+                <a href="https://florentdesmarets.github.io/moody/" style="color:#FF8C5A;text-decoration:none;font-weight:700;">Moody</a>.
+              </p>
+              <p style="font-size:11px;color:#ccc;margin:0;">
+                Si tu n'es pas à l'origine de cette demande, ignore simplement cet email.
+              </p>
+              <p style="font-size:11px;color:#ddd;margin:10px 0 0;">
+                Fait avec ❤️ par Florent Desmarets
+              </p>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
