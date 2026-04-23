@@ -66,6 +66,7 @@ export default function Account() {
   const [reminderTime,      setReminderTime]      = useState(profile?.reminder_time ?? '20:00')
   const [soundActive,       setSoundActive]       = useState(false)
   const [notifBlocked,      setNotifBlocked]      = useState(false)
+  const [textSize,          setTextSize]          = useState(() => localStorage.getItem('textSize') ?? 'md')
   const [badges,            setBadges]            = useState([])
   const [globalStats,       setGlobalStats]       = useState({ count: 0, streak: 0 })
 
@@ -131,6 +132,13 @@ export default function Account() {
     navigate('/')
   }
   async function handleSave(field, value) { await updateProfile({ [field]: value }) }
+
+  function handleTextSize(size) {
+    setTextSize(size)
+    localStorage.setItem('textSize', size)
+    const zoomMap = { sm: '90%', md: '100%', lg: '110%', xl: '120%' }
+    document.documentElement.style.zoom = zoomMap[size] ?? '100%'
+  }
 
   async function handleExportPDF() {
     // Ouvrir la fenêtre en premier (synchrone) — les navigateurs bloquent window.open après un await
@@ -426,6 +434,25 @@ ${tagCorrelHTML}
               <p className="text-[14px] text-[#444] font-semibold">{t('soundEffects')}</p>
             </div>
             <Toggle checked={soundActive} onChange={setSoundActive} />
+          </div>
+          <div className="py-2.5 border-b border-[#f5ede5]">
+            <p className="text-[11px] text-[#aaa] font-semibold uppercase tracking-wide mb-1.5">
+              {lang === 'fr' ? 'Taille du texte' : 'Text size'}
+            </p>
+            <div className="flex gap-1.5">
+              {[
+                { key: 'sm', label: lang === 'fr' ? 'Petit' : 'Small',   icon: 'A',  sz: 'text-[10px]' },
+                { key: 'md', label: lang === 'fr' ? 'Normal' : 'Normal',  icon: 'A',  sz: 'text-[12px]' },
+                { key: 'lg', label: lang === 'fr' ? 'Grand' : 'Large',   icon: 'A',  sz: 'text-[14px]' },
+                { key: 'xl', label: lang === 'fr' ? 'Très grand' : 'X-Large', icon: 'A', sz: 'text-[16px]' },
+              ].map(opt => (
+                <button key={opt.key} onClick={() => handleTextSize(opt.key)}
+                  className={`flex-1 py-1.5 rounded-xl border-2 transition-all duration-200 flex flex-col items-center gap-0.5 ${textSize === opt.key ? 'border-[#FF8040] bg-[#fff0e8]' : 'border-[#f0e8e0] bg-transparent'}`}>
+                  <span className={`font-bold text-[#FF8040] ${opt.sz}`}>{opt.icon}</span>
+                  <span className="text-[9px] text-[#888] font-semibold leading-tight text-center">{opt.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
           <div className="flex justify-between items-center py-2.5">
             <div>

@@ -10,6 +10,9 @@ function applyTheme(theme) {
   root.style.setProperty('--blob1', theme.blob1)
   root.style.setProperty('--blob2', theme.blob2)
   root.style.setProperty('--blob3', theme.blob3)
+  // Met à jour la couleur de la barre de statut PWA
+  const metaTC = document.querySelector('meta[name="theme-color"]')
+  if (metaTC) metaTC.setAttribute('content', theme.themeColor ?? '#FF8C5A')
 }
 
 export function ThemeProvider({ children }) {

@@ -5,6 +5,7 @@ import BgBlobs from '../components/BgBlobs'
 import { useLang } from '../context/LangContext'
 import { useAuth } from '../context/AuthContext'
 import { getAvatar } from '../lib/badges'
+import { useMoods } from '../hooks/useMoods'
 
 // ─── Avatar du bot : logo de l'app ───────────────────────────────────────────
 const BOT_AVATAR = '/icons/apple-touch-icon.png'
@@ -957,16 +958,82 @@ function UserMessage({ text, badge }) {
   )
 }
 
+// ─── Mapping tags → thème conseil ─────────────────────────────────────────────
+const TAG_TO_TOPIC = {
+  fr: {
+    'Fatigué·e': 'corps', 'Très fatigué·e': 'corps', 'Fatigué': 'corps',
+    'Anxieux·se': 'stress', 'Stressé·e': 'stress', 'Journée stressante': 'stress',
+    'Angoissé·e': 'stress',
+    'Pleuré·e': 'tristesse', 'Triste': 'tristesse', 'Cafard': 'tristesse',
+    'Mal dormi·e': 'sommeil', 'Insomnie': 'sommeil',
+    'Peu mangé': 'corps', 'Pas mangé': 'corps', 'Douleurs': 'corps',
+    'Seul·e': 'solitude', 'Isolé·e': 'solitude',
+    'En colère': 'colere', 'Frustré·e': 'colere',
+    'Démotivé·e': 'motivation', 'Pas envie': 'motivation',
+    'Pensées négatives': 'rumination', 'Pensées en boucle': 'rumination',
+    'Manque de confiance': 'estime',
+  },
+  en: {
+    'Fatigued': 'corps', 'Very tired': 'corps', 'Tired': 'corps',
+    'Anxious': 'stress', 'Stressed': 'stress', 'Stressful day': 'stress',
+    'Worried': 'stress',
+    'Cried': 'tristesse', 'Sad': 'tristesse', 'Down': 'tristesse',
+    'Poor sleep': 'sommeil', 'Insomnia': 'sommeil',
+    'Ate little': 'corps', "Didn't eat": 'corps', 'Body pain': 'corps',
+    'Lonely': 'solitude', 'Isolated': 'solitude',
+    'Angry': 'colere', 'Frustrated': 'colere',
+    'Unmotivated': 'motivation', 'No motivation': 'motivation',
+    'Negative thoughts': 'rumination', 'Overthinking': 'rumination',
+    'Low self-esteem': 'estime',
+  },
+}
+
 // ─── Page principale ───────────────────────────────────────────────────────────
 export default function Conseil() {
   const { lang } = useLang()
   const navigate  = useNavigate()
   const { profile } = useAuth()
+  const { fetchMonth } = useMoods()
   const userBadge = getAvatar(profile?.avatar ?? 'starter')
   const [messages,  setMessages]  = useState([{ type: 'bot', text: INTRO[lang] ?? INTRO.fr }])
   const [input,     setInput]     = useState('')
   const bottomRef = useRef(null)
   const inputRef  = useRef(null)
+
+  // ── Chatbot proactif : si l'entrée du jour a des tags négatifs ──────────────
+  useEffect(() => {
+    async function checkTodayMood() {
+      try {
+        const now    = new Date()
+        const data   = await fetchMonth(now.getFullYear(), now.getMonth())
+        const pad    = n => String(n).padStart(2, '0')
+        const key    = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`
+        const entry  = data?.[key]
+        if (!entry?.commentaire) return
+
+        const tags   = entry.commentaire.split(/,\s*/).map(t => t.trim())
+        const tagMap = TAG_TO_TOPIC[lang] ?? TAG_TO_TOPIC.fr
+        let foundTag   = null
+        let foundTopic = null
+        for (const tag of tags) {
+          if (tagMap[tag]) { foundTag = tag; foundTopic = tagMap[tag]; break }
+        }
+        if (!foundTag) return
+
+        const adviceData = ADVICES[lang] ?? ADVICES.fr
+        const cards      = (adviceData[foundTopic] ?? adviceData.default).slice(0, 3)
+        const greeting   = lang === 'fr'
+          ? `J'ai vu que tu te sentais "${foundTag}" aujourd'hui 💙 Voici quelques fiches qui pourraient t'aider.`
+          : `I noticed you were feeling "${foundTag}" today 💙 Here are some tips that might help.`
+
+        setMessages(prev => [
+          ...prev,
+          { type: 'bot', text: greeting, cards },
+        ])
+      } catch (_) { /* silencieux si pas de données */ }
+    }
+    checkTodayMood()
+  }, [lang]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })

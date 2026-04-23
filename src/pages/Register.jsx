@@ -31,12 +31,30 @@ export default function Register() {
   const [error,    setError]    = useState('')
   const [success,  setSuccess]  = useState('')
   const [loading,  setLoading]  = useState(false)
+  const [honeypot, setHoneypot] = useState('')
+  const [captcha,  setCaptcha]  = useState(() => {
+    const a = Math.floor(Math.random() * 9) + 1
+    const b = Math.floor(Math.random() * 9) + 1
+    return { a, b, answer: '' }
+  })
 
   const strength = getStrength(password)
   const strengthLabel = STRENGTH_LABELS[lang]?.[strength] ?? STRENGTH_LABELS.fr[strength]
   const strengthColor = STRENGTH_COLORS[strength]
 
   async function handleSubmit() {
+    // Honeypot : si un bot a rempli le champ caché, on ignore silencieusement
+    if (honeypot) return
+    // Captcha math
+    if (parseInt(captcha.answer) !== captcha.a + captcha.b) {
+      setError(lang === 'fr' ? 'Mauvaise réponse au calcul 🤖 — réessaie !' : 'Wrong answer to the math check 🤖 — try again!')
+      setCaptcha(c => {
+        const a = Math.floor(Math.random() * 9) + 1
+        const b = Math.floor(Math.random() * 9) + 1
+        return { a, b, answer: '' }
+      })
+      return
+    }
     if (!prenom || !email || !password) {
       setError(lang === 'fr' ? 'Tous les champs sont requis' : 'All fields are required')
       return
@@ -150,6 +168,12 @@ export default function Register() {
           </div>
         )}
 
+        {/* Champ honeypot invisible — piège les bots */}
+        <input
+          type="text" value={honeypot} onChange={e => setHoneypot(e.target.value)}
+          style={{ opacity: 0, position: 'absolute', top: 0, left: 0, height: 0, width: 0, zIndex: -1 }}
+          tabIndex={-1} autoComplete="off" aria-hidden="true"
+        />
         <input className="w-full bg-white/90 rounded-full px-4 py-2.5 text-[13px] text-[#555] outline-none mb-3 border-none"
           type="password" placeholder={t('confirmPwd')} value={confirm} onChange={e => setConfirm(e.target.value)} />
         <div className="mt-1 mb-4">
@@ -164,6 +188,23 @@ export default function Register() {
             ))}
           </div>
         </div>
+        {/* Captcha mathématique */}
+        <div className="mb-3 bg-white/15 rounded-2xl px-4 py-3 border border-white/25">
+          <p className="text-white/80 text-[11px] font-bold text-center mb-2 uppercase tracking-wide">
+            🤖 {lang === 'fr' ? 'Vérification anti-robot' : 'Bot check'}
+          </p>
+          <p className="text-white text-[20px] font-extrabold text-center mb-2 tracking-wider">
+            {captcha.a} + {captcha.b} = ?
+          </p>
+          <input
+            type="number" inputMode="numeric"
+            placeholder={lang === 'fr' ? 'Ta réponse…' : 'Your answer…'}
+            value={captcha.answer}
+            onChange={e => setCaptcha(c => ({ ...c, answer: e.target.value }))}
+            className="w-full bg-white/90 rounded-full px-4 py-2 text-[14px] text-[#555] outline-none border-none text-center font-bold"
+          />
+        </div>
+
         {error && <p className="text-white text-[12px] text-center mb-3 bg-white/20 rounded-xl px-3 py-2">{error}</p>}
         <div className="flex justify-center">
           <button onClick={handleSubmit} disabled={loading}

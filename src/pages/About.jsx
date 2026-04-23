@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import QRCode from 'qrcode'
 import BgBlobs from '../components/BgBlobs'
@@ -32,6 +32,20 @@ function AppQRCode({ size = 110 }) {
 export default function About() {
   const navigate = useNavigate()
   const { t, lang } = useLang()
+  const [feedbackType, setFeedbackType] = useState('support')
+  const [feedbackMsg,  setFeedbackMsg]  = useState('')
+  const [feedbackSent, setFeedbackSent] = useState(false)
+
+  function handleSendFeedback() {
+    if (!feedbackMsg.trim()) return
+    const subject = feedbackType === 'support'
+      ? (lang === 'fr' ? 'Message de soutien — Moody' : 'Support message — Moody')
+      : (lang === 'fr' ? 'Suggestion — Moody' : 'Suggestion — Moody')
+    window.location.href = `mailto:florent.desmarets@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(feedbackMsg)}`
+    setFeedbackSent(true)
+    setFeedbackMsg('')
+    setTimeout(() => setFeedbackSent(false), 4000)
+  }
 
   async function handleShare() {
     const text = lang === 'fr'
@@ -103,6 +117,47 @@ export default function About() {
               </button>
             </div>
           </div>
+        </div>
+
+        {/* 💌 Écris-moi un mot */}
+        <div className="bg-white/15 rounded-3xl px-5 py-4 mb-3 slide-in">
+          <p className="text-white font-bold text-[13px] mb-1">
+            💌 {lang === 'fr' ? 'Écris-moi un mot' : 'Send me a message'}
+          </p>
+          <p className="text-white/70 text-[11px] leading-relaxed mb-3">
+            {lang === 'fr'
+              ? 'Un mot de soutien, une idée, un bug à signaler — je lis tout !'
+              : 'A kind word, an idea, a bug report — I read everything!'}
+          </p>
+          {/* Sélecteur de type */}
+          <div className="flex gap-2 mb-3">
+            {[
+              { key: 'support', icon: '💙', label: lang === 'fr' ? 'Soutien' : 'Support' },
+              { key: 'suggest', icon: '💡', label: lang === 'fr' ? 'Suggestion' : 'Suggestion' },
+              { key: 'bug',     icon: '🐛', label: lang === 'fr' ? 'Bug' : 'Bug' },
+            ].map(opt => (
+              <button key={opt.key} onClick={() => setFeedbackType(opt.key)}
+                className={`flex-1 py-2 rounded-2xl text-[11px] font-bold transition-all duration-200 border ${feedbackType === opt.key ? 'bg-white text-[#FF7040] border-white' : 'bg-white/10 text-white/70 border-white/25'}`}>
+                {opt.icon} {opt.label}
+              </button>
+            ))}
+          </div>
+          <textarea
+            value={feedbackMsg}
+            onChange={e => setFeedbackMsg(e.target.value)}
+            placeholder={lang === 'fr' ? 'Ton message…' : 'Your message…'}
+            rows={3}
+            className="w-full bg-white/90 rounded-2xl px-4 py-3 text-[13px] text-[#555] outline-none border-none resize-none mb-3"
+          />
+          {feedbackSent
+            ? <p className="text-center text-white font-bold text-[13px] py-2">
+                {lang === 'fr' ? '✅ Merci beaucoup !' : '✅ Thank you so much!'}
+              </p>
+            : <button onClick={handleSendFeedback}
+                className="w-full py-2.5 rounded-full text-[13px] font-bold text-[#FF7040] bg-white active:scale-[0.97] transition-transform">
+                {lang === 'fr' ? 'Envoyer ✉️' : 'Send ✉️'}
+              </button>
+          }
         </div>
 
         {/* Version */}

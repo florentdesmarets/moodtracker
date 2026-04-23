@@ -19,6 +19,13 @@
     <title>Moody — Journal émotionnel</title>
     <link rel="manifest" href="%BASE_URL%manifest.json" />
     <script>
+      // Applique la taille de texte avant le rendu React (évite le flash)
+      ;(function() {
+        var zoom = { sm: '90%', md: '100%', lg: '110%', xl: '120%' }
+        document.documentElement.style.zoom = zoom[localStorage.getItem('textSize')] || '100%'
+      })()
+    </script>
+    <script>
       ;(function(l) {
         if (l.search[1] === '/') {
           var decoded = l.search.slice(1).split('&').map(function(s) { return s.replace(/~and~/g, '&') })
