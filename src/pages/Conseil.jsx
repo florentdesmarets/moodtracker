@@ -102,91 +102,717 @@ function isCrisis(text, lang) {
 }
 
 // ─── Fiches conseil par thème ─────────────────────────────────────────────────
+// Sources : HAS, INSERM, OMS/WHO, APA, NHS, NIMH, Psycom, 3114.fr
+// Techniques validées : TCC/CBT, ACT, MBSR, TCC-I, CNV, cohérence cardiaque
 const ADVICES = {
   fr: {
+    // ── Stress / Anxiété ─────────────────────────────────────────────────────
     stress: [
-      { emoji: '🌬️', title: 'Respiration 4-7-8', body: 'Inspire 4 secondes · retiens 7 secondes · expire 8 secondes. Répète 4 fois. Calme le système nerveux en moins de 2 minutes.' },
-      { emoji: '🎯', title: 'Ancrage 5-4-3-2-1', body: 'Nomme 5 choses que tu vois · 4 que tu entends · 3 que tu peux toucher · 2 que tu sens · 1 que tu goûtes. Ramène-toi dans le présent.' },
-      { emoji: '📝', title: 'Vide tes pensées', body: 'Écris tout ce qui t\'inquiète, sans filtre et sans relire. Poser les pensées sur le papier les sort de ta tête et réduit leur emprise.' },
+      {
+        emoji: '❤️',
+        title: 'Cohérence cardiaque',
+        body: '5 inspirations + 5 expirations par minute, pendant 5 min, 3 fois par jour. Validé par la HAS : réduit le cortisol et la tension artérielle. Utilise une app ou compte mentalement jusqu\'à 5 pour chaque phase.',
+      },
+      {
+        emoji: '🌬️',
+        title: 'Respiration 4-7-8',
+        body: 'Inspire 4 secondes · retiens 7 secondes · expire lentement sur 8 secondes. Répète 4 cycles. Active le nerf vague et calme le système nerveux en moins de 2 minutes (recommandé par l\'APA).',
+      },
+      {
+        emoji: '🎯',
+        title: 'Ancrage 5-4-3-2-1',
+        body: 'Nomme 5 choses que tu vois · 4 que tu entends · 3 que tu peux toucher · 2 que tu sens · 1 que tu goûtes. Cette technique de pleine conscience (MBSR, Kabat-Zinn) coupe le circuit de l\'anxiété en ramenrant dans le présent.',
+      },
+      {
+        emoji: '📝',
+        title: 'Vide tes pensées',
+        body: 'Écris pendant 10 min tout ce qui t\'inquiète, sans filtre ni relecture. Une étude NIMH montre que l\'externalisation des pensées réduit leur charge émotionnelle et libère de la capacité cognitive.',
+      },
+      {
+        emoji: '⏸️',
+        title: 'Pauses régulières (INRS)',
+        body: 'Le cerveau fonctionne par cycles ultradiens de ~90 min. L\'INRS recommande une pause de 5–10 min toutes les 90 min de travail intensif pour éviter l\'accumulation de cortisol.',
+      },
+      {
+        emoji: '💪',
+        title: 'Relaxation musculaire (Jacobson)',
+        body: 'Contracte chaque groupe musculaire 5 secondes puis relâche 30 secondes, des pieds jusqu\'au visage. Cette technique validée depuis 1938 réduit la tension physique du stress de façon mesurable.',
+      },
     ],
+
+    // ── Sommeil ──────────────────────────────────────────────────────────────
     sommeil: [
-      { emoji: '🌙', title: 'Coupure digitale', body: 'Éteins les écrans 30 min avant de dormir. La lumière bleue bloque la mélatonine, l\'hormone du sommeil.' },
-      { emoji: '🧘', title: 'Scan corporel', body: 'Allongé·e, ferme les yeux. Relâche chaque partie du corps des pieds jusqu\'à la tête. Reviens à la respiration si l\'esprit s\'emballe.' },
-      { emoji: '🌡️', title: 'Chambre fraîche', body: 'La température idéale pour dormir est 16–19°C. Aère ta chambre 10 min avant d\'aller au lit, même en hiver.' },
+      {
+        emoji: '⏰',
+        title: 'Heure de lever fixe',
+        body: 'L\'INSERM recommande une heure de lever identique 7 jours/7, même le week-end. C\'est le levier le plus puissant pour réguler l\'horloge biologique, plus encore que l\'heure du coucher.',
+      },
+      {
+        emoji: '🌙',
+        title: 'Coupure digitale',
+        body: 'Éteins les écrans 30 à 60 min avant de dormir. La lumière bleue (spectres 450–490 nm) supprime la mélatonine jusqu\'à 3h selon l\'INSERM. Remplace par lecture papier ou musique douce.',
+      },
+      {
+        emoji: '☕',
+        title: 'Caféine avant 14h',
+        body: 'La demi-vie de la caféine est de 5 à 6 heures (INSERM). Un café à 16h représente encore la moitié de sa dose à 21h. Évite café, thé noir, sodas et boissons énergisantes après 14h.',
+      },
+      {
+        emoji: '🧘',
+        title: 'Scan corporel',
+        body: 'Allongé·e, ferme les yeux. Relâche consciemment chaque zone du corps des pieds jusqu\'à la tête en expirant. Composante centrale de la TCC-I (thérapie recommandée en 1ère ligne par la HAS pour l\'insomnie).',
+      },
+      {
+        emoji: '🛏️',
+        title: 'Le lit = uniquement le sommeil',
+        body: 'Le contrôle par stimulus (Bootzin, TCC-I) : utilise ton lit uniquement pour dormir. Pas d\'écran, pas de lecture, pas de travail. Le cerveau crée une association automatique lit = sommeil.',
+      },
+      {
+        emoji: '🍷',
+        title: 'Alcool et sommeil',
+        body: 'L\'alcool facilite l\'endormissement mais fragmente le sommeil profond et supprime le sommeil paradoxal (REM), indispensable à la mémorisation et à la régulation émotionnelle (INSERM). Évite-le le soir.',
+      },
     ],
+
+    // ── Tristesse / Dépression ───────────────────────────────────────────────
     tristesse: [
-      { emoji: '🫂', title: 'Autocompassion', body: 'Pose une main sur ton cœur : "C\'est difficile en ce moment, et c\'est normal." Parle-toi comme tu parlerais à un ami qui souffre.' },
-      { emoji: '🚶', title: '10 minutes dehors', body: '10 min de marche en extérieur libèrent des endorphines, changent le décor mental et régulent les émotions. Pas besoin de sport intense.' },
-      { emoji: '☀️', title: 'Lumière naturelle', body: '20 min de lumière du jour régulent la sérotonine et l\'horloge biologique. Ouvre les volets, mets-toi près d\'une fenêtre.' },
+      {
+        emoji: '🏃',
+        title: 'Activation comportementale',
+        body: 'Recommandation de 1ère ligne de la HAS pour la dépression légère à modérée : faire des activités agréables même sans en avoir envie. L\'envie revient après l\'action, pas avant. Commence par 10 minutes.',
+      },
+      {
+        emoji: '🫂',
+        title: 'Autocompassion (Neff)',
+        body: 'Pose une main sur ton cœur : "C\'est difficile en ce moment — c\'est humain." La self-compassion, validée par des centaines d\'études, réduit la dépression et l\'autocritique mieux que l\'estime de soi classique.',
+      },
+      {
+        emoji: '🙏',
+        title: 'Journal de gratitude',
+        body: 'Chaque soir, note 3 choses positives qui se sont passées et pourquoi. En 2 semaines, cette pratique (Seligman, 2005) réduit significativement les symptômes dépressifs et augmente le bien-être.',
+      },
+      {
+        emoji: '☀️',
+        title: 'Lumière naturelle',
+        body: '30 min de lumière du jour avant 10h régulent la sérotonine et la mélatonine. Recommandé par la HAS pour les dépressions saisonnières et les troubles de l\'humeur. Même par temps nuageux, l\'intensité est suffisante.',
+      },
+      {
+        emoji: '🤝',
+        title: 'Maintenir le lien social',
+        body: 'L\'isolement aggrave la dépression (OMS). Même un court échange suffit. Préviens un proche que tu traverses une période difficile — tu n\'as pas à tout expliquer, juste à ne pas rester seul·e.',
+      },
+      {
+        emoji: '🩺',
+        title: 'Consulter un professionnel',
+        body: 'Si la tristesse dure plus de 2 semaines, affecte ton sommeil ou ton appétit, consulte un médecin. La dépression est une maladie, pas une faiblesse — elle se traite efficacement (TCC, médicaments ou les deux selon la HAS).', alert: true,
+      },
     ],
+
+    // ── Colère ───────────────────────────────────────────────────────────────
     colere: [
-      { emoji: '💨', title: 'Expire d\'abord', body: 'L\'expiration lente (6 secondes) active le système parasympathique. Avant tout, expire. Le corps doit ralentir avant que tu puisses réfléchir clairement.' },
-      { emoji: '🏃', title: 'Décharge physique', body: 'La colère est de l\'énergie bloquée. Monte des escaliers, saute sur place, secoue tes bras — ça aide vraiment à évacuer.' },
-      { emoji: '⏱️', title: 'Règle des 10 minutes', body: 'Attends 10 min avant de répondre ou d\'agir. Ce que tu ressentiras alors te guidera bien mieux qu\'en ce moment.' },
+      {
+        emoji: '💨',
+        title: 'Expire d\'abord',
+        body: 'L\'expiration longue (6 secondes) stimule le nerf vague et active le système parasympathique. Fais-le avant tout. Le corps met 20 minutes à éliminer l\'adrénaline — aucune décision importante pendant ce temps.',
+      },
+      {
+        emoji: '🏃',
+        title: 'Décharge physique',
+        body: 'La colère prépare le corps à l\'action (réponse fight-or-flight). Monte et descends des escaliers, fais des sauts ou secoue les bras. L\'APA recommande l\'exercice physique comme premier régulateur de la colère.',
+      },
+      {
+        emoji: '🗣️',
+        title: 'Communication Non-Violente',
+        body: 'Méthode Rosenberg (CNV) : Observation → Sentiment → Besoin → Demande. Ex : "Quand tu interromps (O), je me sens invisible (S), j\'ai besoin d\'être entendu·e (B), peux-tu me laisser finir ? (D)"',
+      },
+      {
+        emoji: '⏱️',
+        title: 'Règle des 10 minutes',
+        body: 'Attends 10 min avant de répondre, envoyer un message ou prendre une décision sous l\'effet de la colère. Ce que tu ressentiras alors sera plus représentatif de ce que tu veux vraiment.',
+      },
+      {
+        emoji: '📓',
+        title: 'Journal de colère',
+        body: 'Note ce qui t\'a mis·e en colère, ce que tu as ressenti dans le corps, et ce dont tu avais besoin. Identifier ses déclencheurs récurrents (TCC) permet d\'anticiper et de répondre différemment.',
+      },
     ],
+
+    // ── Motivation ───────────────────────────────────────────────────────────
     motivation: [
-      { emoji: '🎯', title: 'Règle des 2 minutes', body: 'Si ça prend moins de 2 min, fais-le maintenant. Sinon, engage-toi juste 2 minutes — souvent l\'élan arrive et tu continues.' },
-      { emoji: '🔋', title: 'Qu\'est-ce qui te recharge ?', body: 'Note 3 choses concrètes qui t\'apportent de l\'énergie. Planifie l\'une d\'elles aujourd\'hui, même 15 minutes.' },
-      { emoji: '🌱', title: 'Un seul mini-objectif', body: 'Oublie la liste entière. Qu\'est-ce que tu peux faire dans les 5 prochaines minutes ? Juste ça.' },
+      {
+        emoji: '🍅',
+        title: 'Technique Pomodoro',
+        body: '25 minutes de travail concentré, puis 5 minutes de pause. Après 4 cycles, une pause longue de 20–30 min. Cette méthode exploite les cycles d\'attention naturels et réduit la procrastination.',
+      },
+      {
+        emoji: '🎯',
+        title: 'Règle des 2 minutes',
+        body: 'Si une tâche prend moins de 2 minutes, fais-la immédiatement (David Allen, GTD). Pour les autres, engage-toi seulement pour les 2 premières minutes — le passage à l\'action crée l\'élan.',
+      },
+      {
+        emoji: '🌱',
+        title: 'Un seul mini-objectif',
+        body: 'La théorie du comportement planifié montre qu\'un objectif spécifique et immédiat est beaucoup plus efficace qu\'un grand objectif lointain. Qu\'est-ce que tu peux faire dans les 5 prochaines minutes ?',
+      },
+      {
+        emoji: '🔋',
+        title: 'Identifier tes ressources',
+        body: 'La théorie de l\'auto-détermination (Deci & Ryan) identifie 3 besoins fondamentaux : autonomie, compétence, appartenance. Quelle activité remplit ces 3 besoins ? C\'est souvent là que la motivation revient.',
+      },
+      {
+        emoji: '🎉',
+        title: 'Célébrer les petites victoires',
+        body: 'Chaque petit pas accompli mérite d\'être reconnu. Note tes réussites du jour, même minimes. Le cerveau libère de la dopamine à chaque complétion — c\'est un carburant réel pour continuer.',
+      },
     ],
+
+    // ── Solitude ─────────────────────────────────────────────────────────────
     solitude: [
-      { emoji: '📱', title: '"Je pensais à toi"', body: 'Envoie un message simple à quelqu\'un que tu apprécies. Pas besoin de grand discours. Ça peut changer une journée — la tienne et la leur.' },
-      { emoji: '🌍', title: 'Trouver sa tribu', body: 'Des communautés existent pour tous les intérêts : Discord, Meetup, groupes locaux. Les connexions durables commencent souvent là.' },
-      { emoji: '☕', title: 'Les tiers-lieux', body: 'Café, bibliothèque, coworking. La présence humaine — même sans interaction directe — réduit le sentiment de solitude.' },
+      {
+        emoji: '📱',
+        title: '"Je pensais à toi"',
+        body: 'Envoie un message simple à quelqu\'un que tu apprécies. Une étude de l\'Université de Chicago montre que les gens sous-estiment systématiquement combien leurs messages font plaisir à l\'autre.',
+      },
+      {
+        emoji: '🤲',
+        title: 'Le bénévolat',
+        body: 'Aider les autres est l\'un des antidotes les plus puissants à la solitude. Le bénévolat augmente le sentiment d\'utilité et crée des liens authentiques (étude Holt-Lunstad, 2015).',
+      },
+      {
+        emoji: '🌍',
+        title: 'Trouver sa communauté',
+        body: 'Des groupes existent pour tous les intérêts : Discord, Meetup, associations locales. La solitude chronique est aussi risquée pour la santé que fumer 15 cigarettes par jour (méta-analyse Holt-Lunstad).',
+      },
+      {
+        emoji: '☕',
+        title: 'Les tiers-lieux',
+        body: 'Café, bibliothèque, espace de coworking, parc. La présence humaine — même sans interaction directe — active les circuits sociaux du cerveau et réduit le sentiment d\'isolement.',
+      },
+      {
+        emoji: '🩺',
+        title: 'Solitude chronique',
+        body: 'Si la solitude dure et affecte ton quotidien, parles-en à un médecin ou un psychologue. Des thérapies de groupe et des programmes de soutien existent et sont très efficaces (NHS, HAS).', alert: true,
+      },
     ],
+
+    // ── Douleurs corporelles ─────────────────────────────────────────────────
     corps: [
-      { emoji: '💧', title: 'Hydratation', body: 'La déshydratation amplifie fatigue, maux de tête et anxiété. Vise 1,5–2L d\'eau par jour. Un verre d\'eau frais peut déjà changer l\'état.' },
-      { emoji: '🍽️', title: 'Repas réguliers', body: 'Les variations de glycémie affectent directement l\'humeur. Des repas à heures fixes aident à stabiliser ton état général.' },
-      { emoji: '🛁', title: 'Bain ou douche chaude', body: 'La chaleur relâche les tensions musculaires et réduit le cortisol. 15 minutes suffisent à sentir la différence.' },
-      { emoji: '🩺', title: 'Consulte un médecin', body: 'En cas de douleur persistante, intense ou inhabituelle, consulte un médecin sans attendre. Ces conseils sont des pistes de bien-être général — seul un professionnel de santé peut poser un diagnostic et t\'orienter correctement.', alert: true },
+      {
+        emoji: '💧',
+        title: 'Hydratation',
+        body: 'La déshydratation amplifie fatigue, maux de tête et anxiété dès -1% du poids corporel en eau (INSERM). Vise 1,5–2L par jour. Un grand verre d\'eau fraîche peut déjà améliorer l\'état en quelques minutes.',
+      },
+      {
+        emoji: '🍽️',
+        title: 'Repas réguliers',
+        body: 'Les variations de glycémie affectent directement l\'humeur, la concentration et l\'énergie. Des repas à heures fixes aident à stabiliser l\'état général. Évite de sauter des repas, même en cas de stress.',
+      },
+      {
+        emoji: '🚶',
+        title: 'Mouvement doux',
+        body: 'Même 20–30 min de marche par jour réduisent les douleurs chroniques légères, libèrent des endorphines et améliorent la mobilité (OMS, recommandations activité physique 2020).',
+      },
+      {
+        emoji: '🛁',
+        title: 'Bain ou douche chaude',
+        body: 'La chaleur relâche les tensions musculaires, réduit le cortisol et augmente la sérotonine. 15 à 20 minutes suffisent. Peut aussi aider à l\'endormissement si pris 1h avant de se coucher.',
+      },
+      {
+        emoji: '🩺',
+        title: 'Consulte un médecin',
+        body: 'En cas de douleur persistante (> 3 jours), intense, localisée ou inhabituelle, consulte un médecin sans attendre. Ces conseils sont des pistes générales — seul un professionnel de santé peut établir un diagnostic.', alert: true,
+      },
     ],
+
+    // ── Burn-out ─────────────────────────────────────────────────────────────
+    burnout: [
+      {
+        emoji: '🚨',
+        title: 'Reconnaître les 3 signes (Maslach)',
+        body: 'Le burn-out, reconnu par l\'OMS en 2019 comme phénomène professionnel, se manifeste par : épuisement émotionnel profond · sentiment de cynisme ou détachement · sentiment d\'inefficacité. Si tu te reconnais dans les 3, consulte.',
+      },
+      {
+        emoji: '🚫',
+        title: 'Apprendre à dire non',
+        body: 'L\'INRS identifie la surcharge de travail comme premier facteur de burn-out. "Non" est une phrase complète. Commence par refuser une seule chose cette semaine — c\'est un muscle qui se renforce.',
+      },
+      {
+        emoji: '🔌',
+        title: 'Déconnexion numérique',
+        body: 'Le droit à la déconnexion est inscrit dans la loi française depuis 2017. Désactive les notifications professionnelles hors des heures de travail. La disponibilité permanente entretient l\'épuisement.',
+      },
+      {
+        emoji: '🔋',
+        title: 'Récupération active',
+        body: 'Le repos passif (canapé, écran) récupère moins bien que le repos actif : promenade, lecture, temps social, nature. Planifie au moins une activité récupératrice par jour, même 20 minutes.',
+      },
+      {
+        emoji: '🩺',
+        title: 'Consulte sans attendre',
+        body: 'Le burn-out non traité peut évoluer en dépression sévère. Parles-en à ton médecin traitant — il peut prescrire un arrêt de travail, t\'orienter vers un psychologue ou un médecin du travail (INRS).', alert: true,
+      },
+    ],
+
+    // ── Estime de soi ────────────────────────────────────────────────────────
+    estime: [
+      {
+        emoji: '📓',
+        title: 'Journal de réussites',
+        body: 'Chaque soir, note 3 choses que tu as faites correctement aujourd\'hui, même petites. La TCC montre que focaliser consciemment sur les réussites recalibre les schémas de pensée automatiquement négatifs.',
+      },
+      {
+        emoji: '🧠',
+        title: 'Défusion cognitive (ACT)',
+        body: 'Quand une pensée négative arrive ("je suis nul·le"), essaie : "J\'ai la pensée que je suis nul·le." Cette distance crée par la thérapie d\'acceptation et d\'engagement (ACT) réduit l\'emprise des pensées critiques.',
+      },
+      {
+        emoji: '🌱',
+        title: 'Tes valeurs, pas tes performances',
+        body: 'L\'estime de soi stable repose sur les valeurs (qui tu es) plutôt que sur les performances (ce que tu fais). Identifie 3 valeurs qui te définissent : curiosité, générosité, honnêteté… et agis en accord avec elles.',
+      },
+      {
+        emoji: '🛑',
+        title: 'Stopper la comparaison',
+        body: 'Les réseaux sociaux montrent les meilleurs moments des autres, pas leur réalité. La comparaison vers le haut détériore l\'estime de soi (APA). Limite ton exposition et compare-toi à ta version d\'hier.',
+      },
+      {
+        emoji: '🤝',
+        title: 'Psychothérapie',
+        body: 'La TCC et l\'ACT ont démontré leur efficacité sur l\'estime de soi dans de nombreuses méta-analyses. Un psychologue peut t\'aider à identifier et modifier les schémas de pensée qui alimentent l\'auto-dévalorisation.',
+      },
+    ],
+
+    // ── Deuil ────────────────────────────────────────────────────────────────
+    deuil: [
+      {
+        emoji: '💙',
+        title: 'Le deuil n\'est pas linéaire',
+        body: 'Le deuil ne suit pas un ordre fixe d\'étapes. La recherche actuelle (Stroebe & Schut) montre qu\'on oscille entre la douleur de la perte et la reconstruction. Toutes tes émotions — y compris le soulagement ou la colère — sont normales.',
+      },
+      {
+        emoji: '🫂',
+        title: 'Permets-toi de ressentir',
+        body: 'Vouloir "aller bien vite" est compréhensible mais contre-productif. Accueillir la douleur sans la fuir (principe d\'acceptation, ACT) permet au deuil de progresser. Pleurer est une réponse saine et nécessaire.',
+      },
+      {
+        emoji: '🕯️',
+        title: 'Ritualiser le souvenir',
+        body: 'Créer des rituels (une photo, un objet, une date anniversaire) aide à maintenir un lien symbolique avec la personne perdue tout en avançant. Les rituels donnent un cadre à la douleur (recherches en psychologie du deuil).',
+      },
+      {
+        emoji: '🤝',
+        title: 'Ne pas s\'isoler',
+        body: 'L\'isolement pendant le deuil aggrave le risque de dépression. Accepte l\'aide des proches, même si tu n\'as pas envie. Des groupes de soutien deuil existent partout en France (associations locales, Jalmalv).',
+      },
+      {
+        emoji: '🩺',
+        title: 'Deuil compliqué',
+        body: 'Si la douleur reste intense après 6 mois, affecte fortement le quotidien ou s\'accompagne de pensées de mort, consulte un médecin ou un psychologue spécialisé. Le deuil compliqué se traite avec un accompagnement adapté.', alert: true,
+      },
+    ],
+
+    // ── Pensées négatives / Rumination ───────────────────────────────────────
+    rumination: [
+      {
+        emoji: '⏱️',
+        title: 'Le "temps de rumination"',
+        body: 'Réserve 15 min par jour (même heure, même endroit) pour ressasser tes soucis. En dehors, reporte-les mentalement à cette fenêtre. La TCC montre que cette technique réduit la rumination globale jusqu\'à 40%.',
+      },
+      {
+        emoji: '🍃',
+        title: 'Laisser passer les pensées (ACT)',
+        body: 'Imagine tes pensées comme des feuilles portées par un courant. Observe-les passer sans t\'y accrocher. Tu n\'as pas à croire chaque pensée que tu as — elles ne sont pas des faits.',
+      },
+      {
+        emoji: '🧠',
+        title: 'Questionnement socratique',
+        body: 'Face à une pensée négative, demande-toi : "Est-ce que j\'ai des preuves ? Y a-t-il une autre explication possible ? Qu\'est-ce que je dirais à un ami qui pense ça ?" (Outil central de la TCC).',
+      },
+      {
+        emoji: '🎵',
+        title: 'Interruption d\'activité',
+        body: 'Quand la rumination s\'emballe, change brusquement d\'activité physique ou sensorielle : musique forte, froid sur le visage, activité manuelle. Le cerveau ne peut pas rester en mode rumination et traitement sensoriel en même temps.',
+      },
+      {
+        emoji: '🧘',
+        title: 'Pleine conscience (MBSR)',
+        body: 'Le programme MBSR de Kabat-Zinn (8 semaines, validé par des centaines d\'études) réduit la rumination de façon significative. Des apps comme Petit Bambou ou Headspace proposent des introductions guidées.',
+      },
+    ],
+
+    // ── Réponse par défaut ───────────────────────────────────────────────────
     default: [
-      { emoji: '💙', title: 'Tu es au bon endroit', body: 'Chercher des ressources pour aller mieux est déjà un acte courageux. Décris-moi ce que tu ressens et je t\'orienterai.' },
-      { emoji: '🌬️', title: 'Pause respiration', body: 'Inspire 4 secondes, expire 6 secondes. Répète 3 fois. Un bon point de départ pour presque tout.' },
-      { emoji: '🤝', title: 'Parler à quelqu\'un', body: 'Si tu traverses une période difficile, un professionnel de santé mentale peut vraiment aider. Médecin, psychologue, psychiatre — ils sont là pour ça.' },
+      {
+        emoji: '💙',
+        title: 'Tu es au bon endroit',
+        body: 'Chercher des ressources pour aller mieux est déjà un acte courageux. Décris-moi ce que tu ressens en quelques mots — stress, tristesse, fatigue, relations — et je t\'orienterai vers des conseils adaptés.',
+      },
+      {
+        emoji: '🌬️',
+        title: 'Pause respiration',
+        body: 'Inspire 4 secondes, expire 6 secondes. Répète 3 fois. L\'expiration plus longue que l\'inspiration active le système nerveux parasympathique — c\'est un bon point de départ pour presque tout.',
+      },
+      {
+        emoji: '🤝',
+        title: 'Parler à un professionnel',
+        body: 'Si tu traverses une période difficile, un médecin, psychologue ou psychiatre peut vraiment aider. En France, MonPsy permet 8 séances remboursées avec un psychologue sur prescription médicale.',
+      },
     ],
   },
+
+  // ═══════════════════════════════════════════════════════════════════════════
   en: {
+    // ── Stress / Anxiety ─────────────────────────────────────────────────────
     stress: [
-      { emoji: '🌬️', title: '4-7-8 Breathing', body: 'Inhale 4s · hold 7s · exhale 8s. Repeat 4 times. Calms the nervous system in under 2 minutes.' },
-      { emoji: '🎯', title: '5-4-3-2-1 Grounding', body: 'Name 5 things you see · 4 you hear · 3 you can touch · 2 you smell · 1 you taste. Brings you back to the present moment.' },
-      { emoji: '📝', title: 'Brain dump', body: 'Write everything worrying you, without filtering. Getting thoughts on paper takes them out of your head.' },
+      {
+        emoji: '❤️',
+        title: 'Heart coherence breathing',
+        body: '5 seconds in, 5 seconds out, for 5 minutes, 3 times a day. This technique (HeartMath Institute) measurably reduces cortisol and blood pressure. Count mentally or use a breathing app.',
+      },
+      {
+        emoji: '🌬️',
+        title: '4-7-8 Breathing',
+        body: 'Inhale 4s · hold 7s · exhale 8s. Repeat 4 cycles. Activates the vagus nerve and calms the nervous system in under 2 minutes (recommended by the APA).',
+      },
+      {
+        emoji: '🎯',
+        title: '5-4-3-2-1 Grounding',
+        body: 'Name 5 things you see · 4 you hear · 3 you can touch · 2 you smell · 1 you taste. This MBSR (Kabat-Zinn) grounding technique interrupts the anxiety loop by anchoring you in the present.',
+      },
+      {
+        emoji: '📝',
+        title: 'Brain dump',
+        body: 'Write for 10 minutes everything worrying you, without filtering or re-reading. NIMH research shows externalizing thoughts reduces their emotional weight and frees cognitive capacity.',
+      },
+      {
+        emoji: '⏸️',
+        title: 'Regular breaks',
+        body: 'The brain operates in ~90-minute ultradian cycles. Take a 5–10 minute break every 90 minutes of focused work to prevent cortisol buildup and maintain performance.',
+      },
+      {
+        emoji: '💪',
+        title: 'Progressive muscle relaxation',
+        body: 'Tense each muscle group for 5 seconds then release for 30 seconds, from feet to face (Jacobson, 1938). This evidence-based technique measurably reduces physical stress tension.',
+      },
     ],
+
+    // ── Sleep ─────────────────────────────────────────────────────────────────
     sommeil: [
-      { emoji: '🌙', title: 'Digital curfew', body: 'Turn off screens 30 min before bed. Blue light blocks melatonin, your sleep hormone.' },
-      { emoji: '🧘', title: 'Body scan', body: 'Lying down, close your eyes. Release each body part from feet to head. Return to your breath if your mind wanders.' },
-      { emoji: '🌡️', title: 'Cool room', body: 'Ideal sleep temp is 61–67°F (16–19°C). Air out your bedroom 10 min before bed, even in winter.' },
+      {
+        emoji: '⏰',
+        title: 'Fixed wake-up time',
+        body: 'The NHS and NIMH agree: the same wake-up time 7 days a week is the single most powerful lever for regulating your biological clock — more so than your bedtime.',
+      },
+      {
+        emoji: '🌙',
+        title: 'Digital curfew',
+        body: 'Turn off screens 30–60 min before bed. Blue light (450–490nm spectrum) suppresses melatonin for up to 3 hours. Replace with paper reading or gentle music.',
+      },
+      {
+        emoji: '☕',
+        title: 'Caffeine before 2pm',
+        body: 'Caffeine has a 5–6 hour half-life. A coffee at 4pm still has half its dose active at 9pm. Avoid coffee, black tea, sodas and energy drinks after 2pm.',
+      },
+      {
+        emoji: '🧘',
+        title: 'Body scan',
+        body: 'Lying down, close your eyes. Consciously release each body zone from feet to head on each exhale. A core component of CBT-I (Cognitive Behavioral Therapy for Insomnia), recommended as first-line treatment by the NHS.',
+      },
+      {
+        emoji: '🛏️',
+        title: 'Bed = sleep only',
+        body: 'Stimulus control therapy (Bootzin, CBT-I): use your bed only for sleep. No screens, reading or work in bed. Your brain builds an automatic association: bed = sleep.',
+      },
+      {
+        emoji: '🍷',
+        title: 'Alcohol disrupts sleep',
+        body: 'Alcohol aids falling asleep but fragments deep sleep and suppresses REM sleep — essential for memory and emotional regulation (NIMH). Avoid it in the evening for better sleep quality.',
+      },
     ],
+
+    // ── Sadness / Depression ──────────────────────────────────────────────────
     tristesse: [
-      { emoji: '🫂', title: 'Self-compassion', body: 'Place a hand on your heart: "This is hard right now, and that\'s okay." Talk to yourself like you\'d talk to a struggling friend.' },
-      { emoji: '🚶', title: '10 minutes outside', body: '10 min of outdoor walking releases endorphins and shifts your mental scenery. No intense exercise needed.' },
-      { emoji: '☀️', title: 'Natural light', body: '20 min of daylight regulates serotonin and your biological clock. Open the blinds, sit near a window.' },
+      {
+        emoji: '🏃',
+        title: 'Behavioral activation',
+        body: 'First-line NHS/NIMH recommendation for mild-to-moderate depression: do enjoyable activities even when you don\'t feel like it. Motivation follows action — it doesn\'t precede it. Start with 10 minutes.',
+      },
+      {
+        emoji: '🫂',
+        title: 'Self-compassion (Neff)',
+        body: 'Place a hand on your heart: "This is hard right now — and that\'s human." Self-compassion, validated by hundreds of studies, reduces depression and self-criticism more effectively than classic self-esteem work.',
+      },
+      {
+        emoji: '🙏',
+        title: 'Gratitude journal',
+        body: 'Each evening, write 3 positive things that happened and why. In 2 weeks, this practice (Seligman, 2005) significantly reduces depressive symptoms and increases overall wellbeing.',
+      },
+      {
+        emoji: '☀️',
+        title: 'Natural light',
+        body: '30 minutes of daylight before 10am regulates serotonin and melatonin. Recommended by NHS for seasonal depression and mood disorders. Even on cloudy days, the intensity is sufficient.',
+      },
+      {
+        emoji: '🤝',
+        title: 'Maintain social connection',
+        body: 'Isolation worsens depression (WHO). Even a brief exchange helps. Let someone close know you\'re going through a hard time — you don\'t have to explain everything, just not be alone.',
+      },
+      {
+        emoji: '🩺',
+        title: 'See a professional',
+        body: 'If sadness lasts more than 2 weeks, affects sleep or appetite, see a doctor. Depression is an illness, not weakness — it responds well to treatment (CBT, medication or both, per NIMH guidelines).', alert: true,
+      },
     ],
+
+    // ── Anger ─────────────────────────────────────────────────────────────────
     colere: [
-      { emoji: '💨', title: 'Exhale first', body: 'A slow exhale (6 seconds) activates the parasympathetic system. Before anything else, exhale.' },
-      { emoji: '🏃', title: 'Physical release', body: 'Anger is blocked energy. Climb stairs, jump in place, shake your arms — it genuinely helps.' },
-      { emoji: '⏱️', title: '10-minute rule', body: 'Wait 10 min before responding or deciding. How you feel then will guide you far better.' },
+      {
+        emoji: '💨',
+        title: 'Exhale first',
+        body: 'A long exhale (6 seconds) stimulates the vagus nerve and activates the parasympathetic system. Do this before anything else. The body takes 20 minutes to clear adrenaline — no major decisions during that time.',
+      },
+      {
+        emoji: '🏃',
+        title: 'Physical release',
+        body: 'Anger primes the body for action (fight-or-flight response). Climb stairs, jump in place, shake your arms. The APA recommends physical exercise as the first regulator of anger.',
+      },
+      {
+        emoji: '🗣️',
+        title: 'Nonviolent Communication',
+        body: 'Rosenberg\'s NVC method: Observation → Feeling → Need → Request. Ex: "When you interrupt (O), I feel invisible (F), I need to be heard (N), can you let me finish? (R)"',
+      },
+      {
+        emoji: '⏱️',
+        title: '10-minute rule',
+        body: 'Wait 10 minutes before replying, sending a message or making a decision under anger. What you feel then will better reflect what you actually want.',
+      },
+      {
+        emoji: '📓',
+        title: 'Anger journal',
+        body: 'Note what triggered your anger, what you felt physically, and what need was unmet. Identifying recurring triggers (CBT) helps you anticipate and respond differently next time.',
+      },
     ],
+
+    // ── Motivation ────────────────────────────────────────────────────────────
     motivation: [
-      { emoji: '🎯', title: '2-minute rule', body: 'If it takes less than 2 min, do it now. Otherwise, commit to just 2 minutes — often momentum kicks in.' },
-      { emoji: '🔋', title: 'What recharges you?', body: 'List 3 concrete things that give you energy. Schedule one of them today, even just 15 minutes.' },
-      { emoji: '🌱', title: 'One mini-goal', body: 'Forget the whole list. What can you do in the next 5 minutes? Just that.' },
+      {
+        emoji: '🍅',
+        title: 'Pomodoro technique',
+        body: '25 minutes of focused work, then a 5-minute break. After 4 cycles, a longer 20–30 minute break. This exploits natural attention cycles and effectively reduces procrastination.',
+      },
+      {
+        emoji: '🎯',
+        title: '2-minute rule',
+        body: 'If a task takes less than 2 minutes, do it immediately (David Allen, GTD). For others, commit to just the first 2 minutes — starting creates momentum.',
+      },
+      {
+        emoji: '🌱',
+        title: 'One mini-goal',
+        body: 'Self-determination theory shows a specific, immediate goal is far more effective than a distant big goal. What can you do in the next 5 minutes? Just that.',
+      },
+      {
+        emoji: '🔋',
+        title: 'Find your energy sources',
+        body: 'Self-determination theory (Deci & Ryan) identifies 3 core needs: autonomy, competence, belonging. Which activity fulfills all 3? That\'s often where motivation returns.',
+      },
+      {
+        emoji: '🎉',
+        title: 'Celebrate small wins',
+        body: 'Every completed step deserves recognition. Log your daily wins, however small. The brain releases dopamine with each completion — that\'s real fuel to keep going.',
+      },
     ],
+
+    // ── Loneliness ────────────────────────────────────────────────────────────
     solitude: [
-      { emoji: '📱', title: '"Thinking of you"', body: 'Send a simple message to someone you care about. It can change a day — yours and theirs.' },
-      { emoji: '🌍', title: 'Find your tribe', body: 'Communities exist for every interest: Discord, Meetup, local groups. Lasting connections often start there.' },
-      { emoji: '☕', title: 'Third places', body: 'Café, library, coworking space. Human presence — even without direct interaction — eases loneliness.' },
+      {
+        emoji: '📱',
+        title: '"Thinking of you"',
+        body: 'Send a simple message to someone you care about. A University of Chicago study shows people consistently underestimate how much their messages mean to others.',
+      },
+      {
+        emoji: '🤲',
+        title: 'Volunteering',
+        body: 'Helping others is one of the most powerful antidotes to loneliness. It builds genuine connections and increases sense of purpose (Holt-Lunstad, 2015).',
+      },
+      {
+        emoji: '🌍',
+        title: 'Find your community',
+        body: 'Groups exist for every interest: Discord, Meetup, local clubs. Chronic loneliness is as dangerous to health as smoking 15 cigarettes a day (Holt-Lunstad meta-analysis).',
+      },
+      {
+        emoji: '☕',
+        title: 'Third places',
+        body: 'Café, library, coworking space, park. Human presence — even without direct interaction — activates social brain circuits and eases isolation.',
+      },
+      {
+        emoji: '🩺',
+        title: 'Chronic loneliness',
+        body: 'If loneliness persists and affects daily life, talk to a doctor or therapist. Group therapy and peer support programs are highly effective (NHS, NIMH).', alert: true,
+      },
     ],
+
+    // ── Body pain ─────────────────────────────────────────────────────────────
     corps: [
-      { emoji: '💧', title: 'Hydration', body: 'Dehydration amplifies fatigue, headaches and anxiety. Aim for 1.5–2L of water daily.' },
-      { emoji: '🍽️', title: 'Regular meals', body: 'Blood sugar swings directly affect mood. Regular meal times help stabilize your wellbeing.' },
-      { emoji: '🛁', title: 'Warm shower or bath', body: 'Heat releases muscle tension and reduces cortisol. 15 minutes is enough to feel the difference.' },
-      { emoji: '🩺', title: 'See a doctor', body: 'If the pain is persistent, intense or unusual, see a doctor without delay. These tips are general wellness guidance only — a healthcare professional is the only one who can properly diagnose and treat you.', alert: true },
+      {
+        emoji: '💧',
+        title: 'Hydration',
+        body: 'Dehydration amplifies fatigue, headaches and anxiety from as little as 1% body weight water loss (NIMH). Aim for 1.5–2L daily. A large glass of cold water can already shift your state in minutes.',
+      },
+      {
+        emoji: '🍽️',
+        title: 'Regular meals',
+        body: 'Blood sugar fluctuations directly affect mood, focus and energy. Regular mealtimes stabilize your overall state. Avoid skipping meals, even when stressed.',
+      },
+      {
+        emoji: '🚶',
+        title: 'Gentle movement',
+        body: 'Even 20–30 minutes of walking daily reduces mild chronic pain, releases endorphins and improves mobility (WHO physical activity guidelines 2020).',
+      },
+      {
+        emoji: '🛁',
+        title: 'Warm shower or bath',
+        body: 'Heat releases muscle tension, reduces cortisol and boosts serotonin. 15–20 minutes is enough. It can also help with falling asleep if taken 1 hour before bed.',
+      },
+      {
+        emoji: '🩺',
+        title: 'See a doctor',
+        body: 'For persistent (>3 days), intense, localized or unusual pain, see a doctor without delay. These are general wellness tips only — only a healthcare professional can diagnose and treat you properly.', alert: true,
+      },
     ],
+
+    // ── Burnout ───────────────────────────────────────────────────────────────
+    burnout: [
+      {
+        emoji: '🚨',
+        title: 'Recognize the 3 signs (Maslach)',
+        body: 'Burnout, recognized by the WHO in 2019 as an occupational phenomenon, has 3 dimensions: deep emotional exhaustion · cynicism or detachment from work · reduced sense of effectiveness. If you recognize all 3, see a doctor.',
+      },
+      {
+        emoji: '🚫',
+        title: 'Learning to say no',
+        body: 'Work overload is the leading burnout factor (NIOSH). "No" is a complete sentence. Start by declining one thing this week — it\'s a muscle that strengthens with practice.',
+      },
+      {
+        emoji: '🔌',
+        title: 'Digital disconnection',
+        body: 'Constant availability maintains exhaustion. Turn off work notifications outside working hours. Studies show that just the presence of a work phone reduces cognitive capacity, even unused.',
+      },
+      {
+        emoji: '🔋',
+        title: 'Active recovery',
+        body: 'Passive rest (couch, screens) recovers less well than active rest: walking, reading, socializing, nature time. Plan at least one restorative activity per day, even 20 minutes.',
+      },
+      {
+        emoji: '🩺',
+        title: 'Don\'t wait to consult',
+        body: 'Untreated burnout can develop into severe depression. Talk to your GP — they can prescribe sick leave, refer you to a therapist, or connect you with occupational health services (NIOSH, NHS).', alert: true,
+      },
+    ],
+
+    // ── Self-esteem ───────────────────────────────────────────────────────────
+    estime: [
+      {
+        emoji: '📓',
+        title: 'Success journal',
+        body: 'Each evening, note 3 things you did well today, however small. CBT shows that consciously focusing on achievements recalibrates the brain\'s automatic negative thinking patterns.',
+      },
+      {
+        emoji: '🧠',
+        title: 'Cognitive defusion (ACT)',
+        body: 'When a negative thought arrives ("I\'m useless"), try: "I\'m having the thought that I\'m useless." This distance, created by Acceptance and Commitment Therapy, reduces the hold of self-critical thoughts.',
+      },
+      {
+        emoji: '🌱',
+        title: 'Values, not performance',
+        body: 'Stable self-esteem is built on who you are, not what you achieve. Identify 3 values that define you — curiosity, generosity, honesty — and act in alignment with them each day.',
+      },
+      {
+        emoji: '🛑',
+        title: 'Stop comparing',
+        body: 'Social media shows others\' highlights, not their reality. Upward comparison consistently lowers self-esteem (APA). Limit your exposure and compare yourself only to your yesterday self.',
+      },
+      {
+        emoji: '🤝',
+        title: 'Psychotherapy',
+        body: 'CBT and ACT have demonstrated effectiveness on self-esteem in numerous meta-analyses. A psychologist can help you identify and change the thought patterns that fuel self-deprecation.',
+      },
+    ],
+
+    // ── Grief ─────────────────────────────────────────────────────────────────
+    deuil: [
+      {
+        emoji: '💙',
+        title: 'Grief is not linear',
+        body: 'Grief doesn\'t follow fixed stages in order. Current research (Stroebe & Schut) shows we oscillate between the pain of loss and rebuilding. All emotions — including relief or anger — are completely normal.',
+      },
+      {
+        emoji: '🫂',
+        title: 'Allow yourself to feel',
+        body: 'Wanting to "get over it quickly" is understandable but counter-productive. Welcoming pain without avoidance (ACT acceptance principle) allows grief to move forward. Crying is a healthy and necessary response.',
+      },
+      {
+        emoji: '🕯️',
+        title: 'Ritualizing memory',
+        body: 'Creating rituals — a photo, an object, an anniversary date — helps maintain a symbolic connection with the person lost while still moving forward. Rituals give structure to grief (grief psychology research).',
+      },
+      {
+        emoji: '🤝',
+        title: 'Don\'t isolate yourself',
+        body: 'Isolation during grief increases the risk of depression. Accept help from those close to you, even when you don\'t feel like it. Grief support groups exist and are highly effective (NHS, hospice organizations).',
+      },
+      {
+        emoji: '🩺',
+        title: 'Complicated grief',
+        body: 'If intense pain persists after 6 months, significantly affects daily life, or includes thoughts of death, seek support from a grief-specialized therapist. Complicated grief responds well to targeted treatment.', alert: true,
+      },
+    ],
+
+    // ── Rumination / Intrusive thoughts ───────────────────────────────────────
+    rumination: [
+      {
+        emoji: '⏱️',
+        title: 'Scheduled worry time',
+        body: 'Set aside 15 minutes each day (same time, same place) for worrying. Outside that window, mentally postpone intrusive thoughts to it. CBT shows this reduces overall rumination by up to 40%.',
+      },
+      {
+        emoji: '🍃',
+        title: 'Thoughts on a stream (ACT)',
+        body: 'Picture your thoughts as leaves carried by a current. Watch them float by without grabbing them. You don\'t have to believe every thought you have — they are not facts.',
+      },
+      {
+        emoji: '🧠',
+        title: 'Socratic questioning',
+        body: 'For a negative thought, ask: "Do I have evidence? Is there another explanation? What would I say to a friend who thinks this?" This core CBT technique challenges automatic negative thinking.',
+      },
+      {
+        emoji: '🎵',
+        title: 'Pattern interrupt',
+        body: 'When rumination spirals, abruptly switch to a physical or sensory activity: loud music, cold water on your face, hands-on work. The brain can\'t maintain rumination and sensory processing simultaneously.',
+      },
+      {
+        emoji: '🧘',
+        title: 'Mindfulness (MBSR)',
+        body: 'Kabat-Zinn\'s 8-week MBSR program, validated by hundreds of studies, significantly reduces rumination. Apps like Headspace or Calm offer guided introductions to get started.',
+      },
+    ],
+
+    // ── Default ───────────────────────────────────────────────────────────────
     default: [
-      { emoji: '💙', title: "You're in the right place", body: "Seeking resources to feel better is already courageous. Describe what you're going through — I'm here to help." },
-      { emoji: '🌬️', title: 'Breathing break', body: 'Inhale 4 seconds, exhale 6 seconds. Repeat 3 times. A good starting point for almost everything.' },
-      { emoji: '🤝', title: 'Talk to someone', body: "If you're going through a rough patch, a mental health professional can truly help — doctor, therapist or counselor." },
+      {
+        emoji: '💙',
+        title: "You're in the right place",
+        body: "Seeking resources to feel better is already courageous. Describe what you're feeling in a few words — stress, sadness, fatigue, relationships — and I'll point you toward adapted advice.",
+      },
+      {
+        emoji: '🌬️',
+        title: 'Breathing break',
+        body: 'Inhale 4 seconds, exhale 6 seconds. Repeat 3 times. A longer exhale than inhale activates the parasympathetic nervous system — a solid starting point for almost anything.',
+      },
+      {
+        emoji: '🤝',
+        title: 'Talk to a professional',
+        body: "If you're going through a hard time, a doctor, therapist or counselor can genuinely help. In the US, SAMHSA's helpline (1-800-662-4357) can refer you to local mental health services.",
+      },
     ],
   },
 }
@@ -194,22 +820,30 @@ const ADVICES = {
 // ─── Détection du thème ────────────────────────────────────────────────────────
 const KEYWORDS = {
   fr: {
-    stress:     ['stress', 'anxieux', 'anxieuse', 'angoiss', 'panique', 'peur', 'inquiet', 'tendu', 'tendue', 'débordé', 'pression'],
-    sommeil:    ['dors', 'dormi', 'sommeil', 'insomni', 'nuit', 'réveill', 'fatigué', 'fatiguée', 'épuisé', 'épuisée', 'repose'],
-    tristesse:  ['triste', 'tristesse', 'pleure', 'pleuré', 'déprim', 'vide', 'cafard', 'morale', 'down', 'chagrin'],
-    colere:     ['énervé', 'énervée', 'colère', 'fâché', 'fâchée', 'frustré', 'rage', 'agacé', 'irrité'],
-    motivation: ['motiv', 'démotiv', 'procrastin', 'flemme', 'paress', 'envie de rien', 'rien faire'],
-    solitude:   ['seul', 'seule', 'solitude', 'isolé', 'isolée', 'personne', 'rejeté', 'incompris'],
-    corps:      ['douleur', 'mal au', 'tête', 'ventre', 'dos', 'malade', 'physique', 'faim', 'corps'],
+    burnout:    ['burn', 'burnout', 'épuisement professionnel', 'plus supporter le travail', 'travail me tue', 'surmenage', 'surchargé', 'surchargée', 'plus supporter mon boulot', 'boulot m\'écrase', 'craquer au travail'],
+    stress:     ['stress', 'anxieux', 'anxieuse', 'angoiss', 'panique', 'peur', 'inquiet', 'tendu', 'tendue', 'débordé', 'pression', 'anxiété', 'trop de pression'],
+    sommeil:    ['dors', 'dormi', 'sommeil', 'insomni', 'nuit', 'réveill', 'repose', 'mal dormi', 'pas dormi', 'endormir'],
+    tristesse:  ['triste', 'tristesse', 'pleure', 'pleuré', 'déprim', 'vide', 'cafard', 'morale', 'down', 'chagrin', 'mélancolie', 'blues'],
+    colere:     ['énervé', 'énervée', 'colère', 'fâché', 'fâchée', 'frustré', 'rage', 'agacé', 'irrité', 'en colère', 'hors de moi'],
+    motivation: ['motiv', 'démotiv', 'procrastin', 'flemme', 'paress', 'envie de rien', 'rien faire', 'pas envie', 'productiv'],
+    estime:     ['confiance en moi', 'confiance en soi', 'estime', 'nul', 'nulle', 'pas capable', 'pas à la hauteur', 'inutile', 'honte', 'me juge', 'regard des autres', 'je me sens inutile'],
+    deuil:      ['deuil', 'mort', 'décès', 'perdu quelqu\'un', 'disparu', 'disparue', 'enterrement', 'me manque', 'me manque tellement', 'je pleure sa mort', 'perte'],
+    rumination: ['rumination', 'pensées en boucle', 'je tourne en rond', 'pensées négatives', 'je n\'arrête pas de penser', 'obsédé', 'obsédée', 'pensées intrusives', 'tête tourne', 'je ressasse'],
+    solitude:   ['seul', 'seule', 'solitude', 'isolé', 'isolée', 'personne', 'rejeté', 'incompris', 'incomprise', 'pas d\'amis'],
+    corps:      ['douleur', 'mal au', 'tête', 'ventre', 'dos', 'malade', 'physique', 'faim', 'corps', 'j\'ai mal', 'douleurs'],
   },
   en: {
-    stress:     ['stress', 'anxious', 'anxiety', 'panic', 'worry', 'worried', 'fear', 'scared', 'tense', 'overwhelm', 'pressure'],
-    sommeil:    ['sleep', 'insomni', 'tired', 'exhaust', 'fatigue', 'night', 'awake', 'rest', 'nap'],
-    tristesse:  ['sad', 'sadness', 'depress', 'cry', 'crying', 'empty', 'down', 'low', 'miserable', 'grief'],
-    colere:     ['angry', 'anger', 'mad', 'frustrat', 'rage', 'irritat', 'annoyed', 'furious'],
-    motivation: ['motiv', 'procrastin', 'lazy', 'unmotiv', 'no energy'],
-    solitude:   ['alone', 'lonely', 'isolat', 'nobody', 'no one', 'reject', 'misunderstood'],
-    corps:      ['pain', 'body', 'headache', 'stomach', 'back', 'sick', 'ill', 'physical', 'hungry'],
+    burnout:    ['burnout', 'burn out', 'work exhaustion', 'can\'t take work', 'overworked', 'overwhelmed at work', 'work is killing me', 'job is too much', 'workplace stress'],
+    stress:     ['stress', 'anxious', 'anxiety', 'panic', 'worry', 'worried', 'fear', 'scared', 'tense', 'overwhelm', 'pressure', 'too much pressure'],
+    sommeil:    ['sleep', 'insomni', 'night', 'awake', 'rest', 'slept badly', 'can\'t sleep', 'fall asleep', 'no sleep'],
+    tristesse:  ['sad', 'sadness', 'depress', 'cry', 'crying', 'empty', 'down', 'low', 'miserable', 'grief', 'melancholy', 'blues'],
+    colere:     ['angry', 'anger', 'mad', 'frustrat', 'rage', 'irritat', 'annoyed', 'furious', 'livid', 'losing my temper'],
+    motivation: ['motiv', 'procrastin', 'lazy', 'unmotiv', 'no drive', 'can\'t start', 'productiv'],
+    estime:     ['self-esteem', 'confidence', 'worthless', 'not good enough', 'useless', 'ashamed', 'shame', 'judged', 'what others think', 'i feel useless', 'i\'m a failure'],
+    deuil:      ['grief', 'loss', 'died', 'death', 'lost someone', 'passed away', 'funeral', 'miss them', 'bereavement', 'mourning'],
+    rumination: ['rumination', 'thoughts on loop', 'can\'t stop thinking', 'going in circles', 'negative thoughts', 'obsessed', 'intrusive thoughts', 'overthinking', 'stuck in my head'],
+    solitude:   ['alone', 'lonely', 'isolat', 'nobody', 'no one', 'reject', 'misunderstood', 'no friends'],
+    corps:      ['pain', 'body', 'headache', 'stomach', 'back', 'sick', 'ill', 'physical', 'hungry', 'hurts', 'aching'],
   },
 }
 
@@ -224,8 +858,8 @@ function detectTopic(text, lang) {
 
 // ─── Chips rapides ─────────────────────────────────────────────────────────────
 const QUICK_CHIPS = {
-  fr: ['Je suis stressé·e', 'J\'ai mal dormi', 'Je me sens triste', 'Je manque de motivation', 'Je me sens seul·e', 'J\'ai des douleurs'],
-  en: ['I\'m feeling stressed', 'I slept badly', 'I feel sad', 'I lack motivation', 'I feel lonely', 'I have body pain'],
+  fr: ['Je suis stressé·e', 'J\'ai mal dormi', 'Je me sens triste', 'Je manque de motivation', 'Je me sens seul·e', 'J\'ai des douleurs', 'Je suis épuisé·e par le travail', 'J\'ai des pensées en boucle', 'Je manque de confiance en moi', 'J\'ai perdu quelqu\'un'],
+  en: ['I\'m stressed', 'I slept badly', 'I feel sad', 'I lack motivation', 'I feel lonely', 'I have body pain', 'I\'m burnt out from work', 'I can\'t stop overthinking', 'I have low self-esteem', 'I\'m grieving'],
 }
 
 const INTRO = {
