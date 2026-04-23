@@ -1,10 +1,10 @@
-const CACHE = 'moody-2.0.0'
-const PRECACHE = ['/', '/index.html']
+const CACHE = 'moody-3.0.0'
 
 let notifTimer = null
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(PRECACHE)))
+  // On ne précache RIEN — index.html doit toujours venir du réseau
+  // pour que les nouveaux assets (JS/CSS avec hash) soient toujours à jour
   self.skipWaiting()
 })
 
@@ -19,8 +19,20 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return
+  const url = new URL(e.request.url)
+
+  // index.html et racine : toujours réseau en premier
+  // → garantit qu'on charge toujours les derniers assets hachés
+  if (url.pathname === '/' || url.pathname === '/index.html' || url.pathname === '') {
+    e.respondWith(
+      fetch(e.request).catch(() => caches.match('/index.html') ?? new Response('', { status: 503 }))
+    )
+    return
+  }
+
+  // Autres ressources : cache first, réseau en fallback
   e.respondWith(
-    caches.match(e.request).then(cached => cached ?? fetch(e.request).catch(() => caches.match('/index.html')))
+    caches.match(e.request).then(cached => cached ?? fetch(e.request))
   )
 })
 
