@@ -50,7 +50,7 @@ export default function Drawer({ open, onClose }) {
             <p className="text-white font-bold text-[15px]">{profile?.prenom ?? user?.email ?? '...'}</p>
           </div>
         </div>
-        <nav className="flex flex-col gap-1 px-4 py-4 flex-1">
+        <nav className="flex flex-col gap-1 px-4 py-4 flex-1 overflow-y-auto no-scrollbar">
           {navItems.map(item => (
             <button
               key={item.path}

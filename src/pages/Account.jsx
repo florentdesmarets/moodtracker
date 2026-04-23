@@ -136,7 +136,7 @@ export default function Account() {
   function handleTextSize(size) {
     setTextSize(size)
     localStorage.setItem('textSize', size)
-    const zoomMap = { sm: '90%', md: '100%', lg: '110%', xl: '120%' }
+    const zoomMap = { sm: '92%', md: '100%', lg: '108%', xl: '115%' }
     document.documentElement.style.zoom = zoomMap[size] ?? '100%'
   }
 
