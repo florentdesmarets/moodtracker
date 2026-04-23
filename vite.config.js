@@ -7,7 +7,7 @@ const buildAt = new Date().toISOString().slice(0, 10) // YYYY-MM-DD
 
 export default defineConfig({
   plugins: [react()],
-  base: '/moody/',
+  base: '/',
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
     __BUILD_DATE__:  JSON.stringify(buildAt),

@@ -40,7 +40,7 @@ export default function App() {
       <ThemeProvider>
         <LangProvider>
           <div className="w-full min-h-screen">
-            <BrowserRouter basename="/moody">
+            <BrowserRouter basename="/">
               <PWAInstallBanner />
               <Routes>
                 <Route path="/"         element={<PublicRoute><Welcome /></PublicRoute>} />

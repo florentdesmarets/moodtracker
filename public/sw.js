@@ -1,5 +1,5 @@
-const CACHE = 'moody-1.3.0'
-const PRECACHE = ['/moody/', '/moody/index.html']
+const CACHE = 'moody-2.0.0'
+const PRECACHE = ['/', '/index.html']
 
 let notifTimer = null
 
@@ -45,8 +45,8 @@ function scheduleNext(time, title, body) {
   notifTimer = setTimeout(() => {
     self.registration.showNotification(title, {
       body,
-      icon: '/moody/icons/web-app-manifest-192x192.png',
-      badge: '/moody/icons/favicon-96x96.png',
+      icon: '/icons/web-app-manifest-192x192.png',
+      badge: '/icons/favicon-96x96.png',
       vibrate: [200, 100, 200],
     })
     scheduleNext(time, title, body)

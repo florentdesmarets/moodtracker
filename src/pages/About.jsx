@@ -5,7 +5,7 @@ import BgBlobs from '../components/BgBlobs'
 import AppHeader from '../components/AppHeader'
 import { useLang } from '../context/LangContext'
 
-const APP_URL    = 'https://florentdesmarets.github.io/moody/'
+const APP_URL    = 'https://www.moodyapp.fr/'
 const DONATE_URL = 'https://buymeacoffee.com/florent.d'
 
 function AppQRCode({ size = 110 }) {

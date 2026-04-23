@@ -17,7 +17,9 @@
       "Bash(sed -i 's|badge-moodtracker|badge-moody|g' src/lib/shareBadge.js)",
       "Bash(sed -i 's|florentdesmarets.github.io/moodtracker/|florentdesmarets.github.io/moody/|g' README.md)",
       "Bash(sed -i 's|florentdesmarets/moodtracker|florentdesmarets/moody|g' README.md)",
-      "Bash(sed -i 's|^cd moodtracker|cd moody|g' README.md)"
+      "Bash(sed -i 's|^cd moodtracker|cd moody|g' README.md)",
+      "Bash(powershell -Command \"\\(Get-Content src/pages/About.jsx\\) -replace 'https://florentdesmarets.github.io/moody/', 'https://www.moodyapp.fr/' | Set-Content src/pages/About.jsx\")",
+      "Bash(powershell -Command \"\\(Get-Content src/pages/ForgotPassword.jsx\\) -replace 'https://florentdesmarets.github.io/moody', 'https://www.moodyapp.fr' | Set-Content src/pages/ForgotPassword.jsx\")"
     ]
   }
 }

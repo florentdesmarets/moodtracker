@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase'
 import { useLang } from '../context/LangContext'
 import BgBlobs from '../components/BgBlobs'
 
-const APP_URL = 'https://florentdesmarets.github.io/moody'
+const APP_URL = 'https://www.moodyapp.fr'
 
 export default function ForgotPassword() {
   const navigate      = useNavigate()

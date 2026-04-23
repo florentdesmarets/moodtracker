@@ -1,6 +1,6 @@
 import QRCode from 'qrcode'
 
-const APP_URL = 'https://florentdesmarets.github.io/moody/'
+const APP_URL = 'https://www.moodyapp.fr/'
 
 // Arrondi des coins compatible tous navigateurs
 function roundRect(ctx, x, y, w, h, r) {
