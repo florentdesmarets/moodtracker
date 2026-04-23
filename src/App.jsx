@@ -40,7 +40,7 @@ export default function App() {
       <ThemeProvider>
         <LangProvider>
           <div className="w-full min-h-screen">
-            <BrowserRouter basename="/">
+            <BrowserRouter basename="">
               <PWAInstallBanner />
               <Routes>
                 <Route path="/"         element={<PublicRoute><Welcome /></PublicRoute>} />

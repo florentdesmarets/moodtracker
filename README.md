@@ -2,7 +2,7 @@
 
 > Une application de suivi émotionnel bienveillante, conçue pour aider à mieux se comprendre au quotidien.
 
-**[→ Voir l'application](https://florentdesmarets.github.io/moody/)**
+**[→ Voir l'application](https://www.moodyapp.fr/)**
 
 ---
 
@@ -49,7 +49,7 @@ Ce n'est pas une startup. C'est un projet personnel, fait avec soin, proposé gr
 ### 🎨 Personnalisation
 - 8 thèmes de couleurs
 - Interface disponible en **français** et **anglais**
-- Version desktop avec panneau décoratif
+- Version desktop avec bulles décoratives animées
 
 ### 📄 Export
 - Rapport mensuel PDF avec graphiques et analyse des activités
@@ -60,6 +60,13 @@ Ce n'est pas une startup. C'est un projet personnel, fait avec soin, proposé gr
 ### 📱 PWA
 - Installable sur l'écran d'accueil (Android & iOS)
 - Fonctionne hors-ligne (cache service worker)
+- Bannière d'installation iOS avec guide pas à pas
+
+### 🔐 Authentification
+- Inscription avec confirmation par email
+- Connexion / déconnexion
+- Mot de passe oublié avec lien de réinitialisation
+- Suppression de compte complète (données + profil + auth)
 
 ---
 
@@ -72,6 +79,7 @@ Ce n'est pas une startup. C'est un projet personnel, fait avec soin, proposé gr
 | [Tailwind CSS 3](https://tailwindcss.com) | Styles |
 | [React Router v7](https://reactrouter.com) | Navigation |
 | [Supabase](https://supabase.com) | Auth, base de données, RLS |
+| [OVH Zimbra](https://www.ovhcloud.com) | Envoi des emails transactionnels |
 
 ---
 
@@ -101,6 +109,19 @@ Lance le serveur de développement :
 ```bash
 npm run dev
 ```
+
+L'app est disponible sur **http://localhost:5173/**
+
+---
+
+## 🌿 Branches
+
+| Branche | Rôle |
+|---|---|
+| `main` | Production — déployée sur [www.moodyapp.fr](https://www.moodyapp.fr) |
+| `dev` | Développement — tests et nouvelles fonctionnalités |
+
+Les merges de `dev` vers `main` déclenchent automatiquement le déploiement via GitHub Actions.
 
 ---
 
@@ -135,15 +156,19 @@ npm run dev
 
 ---
 
-## 📦 Déploiement (GitHub Pages)
+## 📦 Déploiement (GitHub Pages + domaine custom)
 
 Le déploiement est automatisé via GitHub Actions à chaque push sur `main`.
+
+L'app est servie sur **[www.moodyapp.fr](https://www.moodyapp.fr)** via GitHub Pages avec domaine custom OVH.
 
 **Secrets GitHub requis** (`Settings → Secrets → Actions`) :
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_ANON_KEY`
 
-**Activer GitHub Pages** : `Settings → Pages → Source → GitHub Actions`
+**Supabase URL Configuration** :
+- Site URL : `https://www.moodyapp.fr/`
+- Redirect URLs : `https://www.moodyapp.fr/**`
 
 ---
 
@@ -159,7 +184,7 @@ Moody est gratuit et open-source. Si l'app t'aide et que tu souhaites participer
 
 Si tu penses que Moody peut aider quelqu'un autour de toi, n'hésite pas à le partager !
 
-**https://florentdesmarets.github.io/moody/**
+**https://www.moodyapp.fr/**
 
 ---
 
