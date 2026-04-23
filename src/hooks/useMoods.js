@@ -28,7 +28,7 @@ export function useMoods() {
     return map
   }, [user])
 
-  const saveMood = useCallback(async ({ date, niveau, emoji, commentaire, sommeil, nourriture, fatigue, event }) => {
+  const saveMood = useCallback(async ({ date, niveau, emoji, commentaire, sommeil, nourriture, fatigue }) => {
     if (!user) return { error: 'Non connecté' }
     const { data, error } = await supabase
       .from('moods')
@@ -41,7 +41,6 @@ export function useMoods() {
         sommeil:     sommeil     ?? null,
         nourriture:  nourriture  ?? null,
         fatigue:     fatigue     ?? null,
-        event:       event       ?? null,
         updated_at: new Date().toISOString(),
       }, { onConflict: 'user_id,date' })
       .select()

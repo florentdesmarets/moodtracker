@@ -13,7 +13,7 @@ export default function Thanks() {
   const location    = useLocation()
   const { t }       = useLang()
   const { saveMood, fetchGlobalStats } = useMoods()
-  const { level, emoji, commentaire, sommeil, nourriture, fatigue, event } = location.state ?? {}
+  const { level, emoji, commentaire, sommeil, nourriture, fatigue } = location.state ?? {}
 
   const [confetti,  setConfetti]  = useState(false)
   const [milestone, setMilestone] = useState(null)
@@ -24,7 +24,7 @@ export default function Thanks() {
     const pad = (n) => String(n).padStart(2, '0')
     const date = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`
 
-    saveMood({ date, niveau: level, emoji, commentaire: commentaire ?? '', sommeil: sommeil ?? null, nourriture: nourriture ?? null, fatigue: fatigue ?? null, event: event ?? null })
+    saveMood({ date, niveau: level, emoji, commentaire: commentaire ?? '', sommeil: sommeil ?? null, nourriture: nourriture ?? null, fatigue: fatigue ?? null })
       .then(() => fetchGlobalStats())
       .then(({ streak }) => {
         if (MILESTONES.includes(streak)) {
