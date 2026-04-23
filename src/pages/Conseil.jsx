@@ -1017,18 +1017,34 @@ export default function Conseil() {
 
         const tags   = entry.commentaire.split(/,\s*/).map(t => t.trim())
         const tagMap = TAG_TO_TOPIC[lang] ?? TAG_TO_TOPIC.fr
-        let foundTag   = null
-        let foundTopic = null
-        for (const tag of tags) {
-          if (tagMap[tag]) { foundTag = tag; foundTopic = tagMap[tag]; break }
-        }
-        if (!foundTag) return
 
+        // Trouve TOUS les tags négatifs correspondants (max 3 thèmes distincts)
+        const matches   = []
+        const seenTopics = new Set()
+        for (const tag of tags) {
+          const topic = tagMap[tag]
+          if (topic && !seenTopics.has(topic)) {
+            matches.push({ tag, topic })
+            seenTopics.add(topic)
+            if (matches.length >= 3) break
+          }
+        }
+        if (matches.length === 0) return
+
+        // 2 fiches par thème détecté
         const adviceData = ADVICES[lang] ?? ADVICES.fr
-        const cards      = (adviceData[foundTopic] ?? adviceData.default).slice(0, 3)
-        const greeting   = lang === 'fr'
-          ? `J'ai vu que tu te sentais "${foundTag}" aujourd'hui 💙 Voici quelques fiches qui pourraient t'aider.`
-          : `I noticed you were feeling "${foundTag}" today 💙 Here are some tips that might help.`
+        const cards      = matches.flatMap(({ topic }) =>
+          (adviceData[topic] ?? adviceData.default).slice(0, 2)
+        )
+
+        // Salutation avec tous les tags
+        const tagNames = matches.map(m => `"${m.tag}"`)
+        const tagList  = tagNames.length === 1
+          ? tagNames[0]
+          : tagNames.slice(0, -1).join(', ') + (lang === 'fr' ? ' et ' : ' and ') + tagNames[tagNames.length - 1]
+        const greeting = lang === 'fr'
+          ? `J'ai vu que tu te sentais ${tagList} aujourd'hui 💙 Voici des fiches adaptées pour chaque ressenti.`
+          : `I noticed you were feeling ${tagList} today 💙 Here are cards tailored to each feeling.`
 
         setMessages(prev => [
           ...prev,
