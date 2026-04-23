@@ -3,6 +3,7 @@ import AppHeader from '../components/AppHeader'
 import BgBlobs from '../components/BgBlobs'
 import { useLang } from '../context/LangContext'
 import { useMoods } from '../hooks/useMoods'
+import { getEventById } from '../lib/events'
 
 function StatCard({ value, label }) {
   return (
@@ -44,7 +45,7 @@ function fatigueInfo(avg, t) {
 }
 
 export default function Stats() {
-  const { t }                    = useLang()
+  const { t, lang }              = useLang()
   const { fetchMonth, getStats } = useMoods()
   const [moodsMap, setMoodsMap]  = useState({})
   const [stats,    setStats]     = useState({ count: 0, avg: 0, positive: 0, topEmoji: '😐', avgSommeil: null, avgNourriture: null, avgFatigue: null })
@@ -81,6 +82,21 @@ export default function Stats() {
   const foodInf    = foodInfo(stats.avgNourriture, t)
   const fatigueInf = fatigueInfo(stats.avgFatigue, t)
 
+  // Événements de vie ce mois
+  const isFR = lang === 'fr'
+  const eventEntries = Object.values(moodsMap).filter(m => m.event)
+  const eventGroups = {}
+  eventEntries.forEach(m => {
+    if (!eventGroups[m.event]) eventGroups[m.event] = []
+    eventGroups[m.event].push(m.niveau)
+  })
+  const eventStats = Object.entries(eventGroups).map(([id, niveaux]) => {
+    const ev = getEventById(id)
+    if (!ev) return null
+    const avg = niveaux.reduce((a, b) => a + b, 0) / niveaux.length
+    return { ev, avg: Math.round(avg * 10) / 10, count: niveaux.length }
+  }).filter(Boolean).sort((a, b) => b.avg - a.avg)
+
   const monthName = t('months')[today.getMonth()].toLowerCase()
   const monthLabel = t('langValue').startsWith('F')
     ? `en ${monthName}`
@@ -115,6 +131,43 @@ export default function Stats() {
             {fatigueInf && (
               <TrendCard emoji={fatigueInf.emoji} result={fatigueInf.result} label={`${t('avgFatigueLabel')} · ${monthLabel}`} />
             )}
+          </div>
+        )}
+
+        {/* Événements de vie */}
+        {eventStats.length > 0 && (
+          <div className="bg-white/12 rounded-2xl p-3 mt-1 mb-2">
+            <p className="text-white text-[12px] font-bold mb-2.5">
+              🎭 {isFR ? 'Événements ce mois' : 'Events this month'}
+            </p>
+            <div className="flex flex-col gap-2">
+              {eventStats.map(({ ev, avg, count }) => {
+                const moodColor = avg >= 5 ? '#4CAF50' : avg >= 4 ? '#FFD700' : avg >= 3 ? '#FFB347' : '#FF4F4F'
+                return (
+                  <div key={ev.id} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[18px]">{ev.emoji}</span>
+                      <div>
+                        <p className="text-white text-[12px] font-semibold leading-none">
+                          {isFR ? ev.fr : ev.en}
+                        </p>
+                        {count > 1 && (
+                          <p className="text-white/50 text-[9px] mt-0.5">
+                            {count}× {isFR ? 'ce mois' : 'this month'}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-16 h-1.5 rounded-full bg-white/15 overflow-hidden">
+                        <div className="h-full rounded-full" style={{ width: `${(avg / 7) * 100}%`, background: moodColor }} />
+                      </div>
+                      <span className="text-white/80 text-[11px] font-bold w-8 text-right">{avg}/7</span>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         )}
 
