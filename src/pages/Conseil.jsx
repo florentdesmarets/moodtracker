@@ -69,6 +69,7 @@ const ADVICES = {
       { emoji: '💧', title: 'Hydratation', body: 'La déshydratation amplifie fatigue, maux de tête et anxiété. Vise 1,5–2L d\'eau par jour. Un verre d\'eau frais peut déjà changer l\'état.' },
       { emoji: '🍽️', title: 'Repas réguliers', body: 'Les variations de glycémie affectent directement l\'humeur. Des repas à heures fixes aident à stabiliser ton état général.' },
       { emoji: '🛁', title: 'Bain ou douche chaude', body: 'La chaleur relâche les tensions musculaires et réduit le cortisol. 15 minutes suffisent à sentir la différence.' },
+      { emoji: '🩺', title: 'Consulte un médecin', body: 'En cas de douleur persistante, intense ou inhabituelle, consulte un médecin sans attendre. Ces conseils sont des pistes de bien-être général — seul un professionnel de santé peut poser un diagnostic et t\'orienter correctement.', alert: true },
     ],
     default: [
       { emoji: '💙', title: 'Tu es au bon endroit', body: 'Chercher des ressources pour aller mieux est déjà un acte courageux. Décris-moi ce que tu ressens et je t\'orienterai.' },
@@ -111,6 +112,7 @@ const ADVICES = {
       { emoji: '💧', title: 'Hydration', body: 'Dehydration amplifies fatigue, headaches and anxiety. Aim for 1.5–2L of water daily.' },
       { emoji: '🍽️', title: 'Regular meals', body: 'Blood sugar swings directly affect mood. Regular meal times help stabilize your wellbeing.' },
       { emoji: '🛁', title: 'Warm shower or bath', body: 'Heat releases muscle tension and reduces cortisol. 15 minutes is enough to feel the difference.' },
+      { emoji: '🩺', title: 'See a doctor', body: 'If the pain is persistent, intense or unusual, see a doctor without delay. These tips are general wellness guidance only — a healthcare professional is the only one who can properly diagnose and treat you.', alert: true },
     ],
     default: [
       { emoji: '💙', title: "You're in the right place", body: "Seeking resources to feel better is already courageous. Describe what you're going through — I'm here to help." },
@@ -182,14 +184,16 @@ function BotAvatar() {
 }
 
 // ─── Composants de message ─────────────────────────────────────────────────────
-function AdviceCard({ emoji, title, body }) {
+function AdviceCard({ emoji, title, body, alert }) {
   return (
-    <div className="bg-white/20 rounded-2xl px-4 py-3 border border-white/25 mb-2">
+    <div className={`rounded-2xl px-4 py-3 border mb-2 ${alert
+      ? 'bg-white/25 border-white/60'
+      : 'bg-white/20 border-white/25'}`}>
       <div className="flex items-center gap-2 mb-1">
         <span className="text-[18px]">{emoji}</span>
         <p className="text-white font-bold text-[12px]">{title}</p>
       </div>
-      <p className="text-white/80 text-[11px] leading-relaxed">{body}</p>
+      <p className={`text-[11px] leading-relaxed ${alert ? 'text-white' : 'text-white/80'}`}>{body}</p>
     </div>
   )
 }
