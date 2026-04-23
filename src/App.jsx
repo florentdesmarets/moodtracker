@@ -18,6 +18,7 @@ import Calendar     from './pages/Calendar'
 import Stats        from './pages/Stats'
 import Chart        from './pages/Chart'
 import Account      from './pages/Account'
+import Conseil        from './pages/Conseil'
 import Crisis         from './pages/Crisis'
 import About          from './pages/About'
 import ForgotPassword from './pages/ForgotPassword'
@@ -85,6 +86,7 @@ export default function App() {
                 <Route path="/stats"         element={<PrivateRoute><Stats /></PrivateRoute>} />
                 <Route path="/chart"         element={<PrivateRoute><Chart /></PrivateRoute>} />
                 <Route path="/account"       element={<PrivateRoute><Account /></PrivateRoute>} />
+                <Route path="/conseil"       element={<PrivateRoute><Conseil /></PrivateRoute>} />
                 <Route path="/crisis"        element={<PrivateRoute><Crisis /></PrivateRoute>} />
                 <Route path="/about"           element={<About />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />

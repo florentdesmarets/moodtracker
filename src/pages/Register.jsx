@@ -4,6 +4,22 @@ import { useAuth } from '../context/AuthContext'
 import { useLang } from '../context/LangContext'
 import BgBlobs from '../components/BgBlobs'
 
+function getStrength(pwd) {
+  if (!pwd) return 0
+  let score = 0
+  if (pwd.length >= 8)             score++
+  if (/[A-Z]/.test(pwd))           score++
+  if (/[0-9]/.test(pwd))           score++
+  if (/[^A-Za-z0-9]/.test(pwd))    score++
+  return score // 0–4
+}
+
+const STRENGTH_LABELS = {
+  fr: ['', 'Trop faible', 'Faible', 'Moyen', 'Fort 💪'],
+  en: ['', 'Too weak', 'Weak', 'Fair', 'Strong 💪'],
+}
+const STRENGTH_COLORS = ['', '#ef4444', '#f97316', '#eab308', '#22c55e']
+
 export default function Register() {
   const navigate   = useNavigate()
   const { signUp } = useAuth()
@@ -16,9 +32,25 @@ export default function Register() {
   const [success,  setSuccess]  = useState('')
   const [loading,  setLoading]  = useState(false)
 
+  const strength = getStrength(password)
+  const strengthLabel = STRENGTH_LABELS[lang]?.[strength] ?? STRENGTH_LABELS.fr[strength]
+  const strengthColor = STRENGTH_COLORS[strength]
+
   async function handleSubmit() {
-    if (!prenom || !email || !password) { setError('Tous les champs sont requis'); return }
-    if (password !== confirm) { setError('Les mots de passe ne correspondent pas'); return }
+    if (!prenom || !email || !password) {
+      setError(lang === 'fr' ? 'Tous les champs sont requis' : 'All fields are required')
+      return
+    }
+    if (strength < 3) {
+      setError(lang === 'fr'
+        ? 'Mot de passe trop faible — utilise 8+ caractères, une majuscule, un chiffre et un caractère spécial.'
+        : 'Password too weak — use 8+ characters, an uppercase letter, a number and a special character.')
+      return
+    }
+    if (password !== confirm) {
+      setError(lang === 'fr' ? 'Les mots de passe ne correspondent pas' : 'Passwords do not match')
+      return
+    }
     setLoading(true); setError(''); setSuccess('')
     const { error, emailConfirmation } = await signUp({ email, password, prenom, langue: lang })
     setLoading(false)
@@ -95,8 +127,29 @@ export default function Register() {
           type="text" placeholder={t('firstname')} value={prenom} onChange={e => setPrenom(e.target.value)} />
         <input className="w-full bg-white/90 rounded-full px-4 py-2.5 text-[13px] text-[#555] outline-none mb-2 border-none"
           type="email" placeholder={t('email')} value={email} onChange={e => setEmail(e.target.value)} />
-        <input className="w-full bg-white/90 rounded-full px-4 py-2.5 text-[13px] text-[#555] outline-none mb-2 border-none"
+        <input className="w-full bg-white/90 rounded-full px-4 py-2.5 text-[13px] text-[#555] outline-none mb-1.5 border-none"
           type="password" placeholder={t('password')} value={password} onChange={e => setPassword(e.target.value)} />
+
+        {/* Barre de force du mot de passe */}
+        {password.length > 0 && (
+          <div className="mb-2 px-1">
+            <div className="flex gap-1 mb-1">
+              {[1,2,3,4].map(i => (
+                <div key={i} className="flex-1 h-1 rounded-full transition-all duration-300"
+                  style={{ background: i <= strength ? strengthColor : 'rgba(255,255,255,0.25)' }} />
+              ))}
+            </div>
+            <p className="text-[10px] font-semibold" style={{ color: strengthColor }}>{strengthLabel}</p>
+            {strength < 4 && (
+              <p className="text-white/55 text-[9px] mt-0.5">
+                {lang === 'fr'
+                  ? '8+ caractères · majuscule · chiffre · caractère spécial (!@#$…)'
+                  : '8+ chars · uppercase · number · special character (!@#$…)'}
+              </p>
+            )}
+          </div>
+        )}
+
         <input className="w-full bg-white/90 rounded-full px-4 py-2.5 text-[13px] text-[#555] outline-none mb-3 border-none"
           type="password" placeholder={t('confirmPwd')} value={confirm} onChange={e => setConfirm(e.target.value)} />
         <div className="mt-1 mb-4">

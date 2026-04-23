@@ -15,6 +15,7 @@ export default function Drawer({ open, onClose }) {
     { icon: '📊', label: t('navStats'),    path: '/stats'    },
     { icon: '📈', label: t('navChart'),    path: '/chart'    },
     { icon: '👤', label: t('navAccount'),  path: '/account'  },
+    { icon: '💬', label: t('navConseil'),  path: '/conseil'  },
     { icon: '🆘', label: t('navCrisis'),   path: '/crisis', crisis: true },
     { icon: 'ℹ️', label: t('navAbout'),    path: '/about'    },
   ]
