@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { LangProvider } from './context/LangContext'
 import { ThemeProvider } from './context/ThemeContext'
@@ -45,7 +45,20 @@ function PublicRoute({ children }) {
   const [hasAuthToken] = useState(
     () => typeof window !== 'undefined' && window.location.hash.includes('access_token')
   )
-  if (loading || (hasAuthToken && !user)) return <LoadingScreen />
+  // Timeout de sécurité : si le token est invalide/périmé (>120s pour Supabase,
+  // ou token déjà consommé → 403), on sort du loading après 5s pour ne pas boucler.
+  const [tokenExpired, setTokenExpired] = useState(false)
+  useEffect(() => {
+    if (!hasAuthToken || user) return
+    const t = setTimeout(() => {
+      // Nettoie le hash de l'URL avant de laisser l'app reprendre normalement
+      window.history.replaceState(null, '', window.location.pathname)
+      setTokenExpired(true)
+    }, 5000)
+    return () => clearTimeout(t)
+  }, [hasAuthToken, user])
+
+  if (loading || (hasAuthToken && !user && !tokenExpired)) return <LoadingScreen />
   return user ? <Navigate to="/mood" replace /> : children
 }
 
