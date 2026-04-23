@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useState } from 'react'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { LangProvider } from './context/LangContext'
 import { ThemeProvider } from './context/ThemeContext'
@@ -22,15 +23,29 @@ import About          from './pages/About'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword  from './pages/ResetPassword'
 
+function LoadingScreen() {
+  return (
+    <div className="bg-app flex flex-col min-h-[100dvh] items-center justify-center gap-3">
+      <span className="text-[64px] animate-bounce" style={{ animationDuration: '1.2s' }}>🩷</span>
+      <p className="text-white/70 text-[13px] font-medium tracking-wide">Chargement…</p>
+    </div>
+  )
+}
+
 function PrivateRoute({ children }) {
   const { user, loading } = useAuth()
-  if (loading) return null
+  if (loading) return <LoadingScreen />
   return user ? children : <Navigate to="/" replace />
 }
 
 function PublicRoute({ children }) {
   const { user, loading } = useAuth()
-  if (loading) return null
+  // Capturé une seule fois au montage : si l'URL contient un access_token
+  // (retour confirmation email / reset), on attend que Supabase traite le hash.
+  const [hasAuthToken] = useState(
+    () => typeof window !== 'undefined' && window.location.hash.includes('access_token')
+  )
+  if (loading || (hasAuthToken && !user)) return <LoadingScreen />
   return user ? <Navigate to="/mood" replace /> : children
 }
 

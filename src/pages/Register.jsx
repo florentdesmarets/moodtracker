@@ -62,11 +62,16 @@ export default function Register() {
                 <p key={i} className="text-white/80 text-[12px] leading-relaxed">{step}</p>
               ))}
             </div>
-            <p className="text-white/50 text-[11px] mt-4 leading-relaxed">
-              {lang === 'fr'
-                ? '💡 L\'email peut mettre quelques minutes à arriver. Pense à vérifier les spams !'
-                : '💡 The email may take a few minutes. Check your spam folder!'}
-            </p>
+            <div className="mt-4 bg-white/20 rounded-2xl px-4 py-3 border border-white/30">
+              <p className="text-white text-[12px] font-bold mb-1">
+                {lang === 'fr' ? '📂 Pas d\'email ?' : '📂 No email?'}
+              </p>
+              <p className="text-white/85 text-[11px] leading-relaxed">
+                {lang === 'fr'
+                  ? 'Vérifie ton dossier Spam ou Courriers indésirables — les emails Moody peuvent y atterrir !'
+                  : 'Check your Spam or Junk folder — Moody emails sometimes land there!'}
+              </p>
+            </div>
           </div>
 
           <button onClick={() => navigate('/login')}

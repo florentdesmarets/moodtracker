@@ -53,11 +53,16 @@ export default function ForgotPassword() {
           ).map((step, i) => (
             <p key={i} className="text-white/80 text-[12px] leading-relaxed mb-2 last:mb-0">{step}</p>
           ))}
-          <p className="text-white/50 text-[11px] mt-4 leading-relaxed">
-            {isFR
-              ? '💡 L\'email peut mettre quelques minutes. Pense à vérifier les spams !'
-              : '💡 The email may take a few minutes. Check your spam folder!'}
-          </p>
+          <div className="mt-4 bg-white/20 rounded-2xl px-4 py-3 border border-white/30">
+            <p className="text-white text-[12px] font-bold mb-1">
+              {isFR ? '📂 Pas d\'email ?' : '📂 No email?'}
+            </p>
+            <p className="text-white/85 text-[11px] leading-relaxed">
+              {isFR
+                ? 'Vérifie ton dossier Spam ou Courriers indésirables — les emails Moody peuvent y atterrir !'
+                : 'Check your Spam or Junk folder — Moody emails sometimes land there!'}
+            </p>
+          </div>
         </div>
 
         <button onClick={() => navigate('/login')}
