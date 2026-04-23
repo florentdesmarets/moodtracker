@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useLang } from '../context/LangContext'
@@ -31,28 +31,71 @@ export default function Register() {
   const [error,    setError]    = useState('')
   const [success,  setSuccess]  = useState('')
   const [loading,  setLoading]  = useState(false)
-  const [honeypot, setHoneypot] = useState('')
-  const [captcha,  setCaptcha]  = useState(() => {
+  const [honeypot,  setHoneypot]  = useState('')
+  const [captcha,   setCaptcha]   = useState(() => {
     const a = Math.floor(Math.random() * 9) + 1
     const b = Math.floor(Math.random() * 9) + 1
     return { a, b, answer: '' }
   })
+  // ── Anti-bot : délai minimum + limite de tentatives ────────────────────────
+  const mountedAt    = useRef(Date.now())          // horodatage d'affichage du formulaire
+  const [attempts,   setAttempts]   = useState(0)  // échecs consécutifs
+  const [blockedUntil,setBlockedUntil] = useState(0) // timestamp de déblocage
+  const [countdown,  setCountdown]  = useState(0)  // secondes restantes affichées
+
+  // Décompte affiché pendant le blocage
+  useEffect(() => {
+    if (blockedUntil <= Date.now()) return
+    const id = setInterval(() => {
+      const remaining = Math.ceil((blockedUntil - Date.now()) / 1000)
+      if (remaining <= 0) { setCountdown(0); clearInterval(id) }
+      else setCountdown(remaining)
+    }, 500)
+    return () => clearInterval(id)
+  }, [blockedUntil])
 
   const strength = getStrength(password)
   const strengthLabel = STRENGTH_LABELS[lang]?.[strength] ?? STRENGTH_LABELS.fr[strength]
   const strengthColor = STRENGTH_COLORS[strength]
 
+  function resetCaptcha() {
+    const a = Math.floor(Math.random() * 9) + 1
+    const b = Math.floor(Math.random() * 9) + 1
+    setCaptcha({ a, b, answer: '' })
+  }
+
+  function registerFailure(msg) {
+    const next = attempts + 1
+    setAttempts(next)
+    if (next >= 3) {
+      const until = Date.now() + 60_000
+      setBlockedUntil(until)
+      setCountdown(60)
+      setAttempts(0)
+      setError(lang === 'fr'
+        ? '🔒 Trop de tentatives — réessaie dans 60 secondes.'
+        : '🔒 Too many attempts — try again in 60 seconds.')
+    } else {
+      setError(msg)
+    }
+    resetCaptcha()
+  }
+
   async function handleSubmit() {
-    // Honeypot : si un bot a rempli le champ caché, on ignore silencieusement
+    // ── Blocage temporaire ──────────────────────────────────────────────────
+    if (Date.now() < blockedUntil) return
+
+    // ── Honeypot silencieux ─────────────────────────────────────────────────
     if (honeypot) return
-    // Captcha math
+
+    // ── Délai minimum : un humain met au moins 4 s à remplir le formulaire ──
+    if (Date.now() - mountedAt.current < 4000) return
+
+    // ── Captcha math ────────────────────────────────────────────────────────
     if (parseInt(captcha.answer) !== captcha.a + captcha.b) {
-      setError(lang === 'fr' ? 'Mauvaise réponse au calcul 🤖 — réessaie !' : 'Wrong answer to the math check 🤖 — try again!')
-      setCaptcha(c => {
-        const a = Math.floor(Math.random() * 9) + 1
-        const b = Math.floor(Math.random() * 9) + 1
-        return { a, b, answer: '' }
-      })
+      registerFailure(lang === 'fr'
+        ? 'Mauvaise réponse au calcul 🤖 — réessaie !'
+        : 'Wrong answer to the math check 🤖 — try again!')
       return
     }
     if (!prenom || !email || !password) {
@@ -206,10 +249,24 @@ export default function Register() {
         </div>
 
         {error && <p className="text-white text-[12px] text-center mb-3 bg-white/20 rounded-xl px-3 py-2">{error}</p>}
+
+        {/* Indicateur de tentatives restantes */}
+        {attempts > 0 && Date.now() >= blockedUntil && (
+          <p className="text-white/60 text-[10px] text-center mb-2">
+            {lang === 'fr'
+              ? `⚠️ ${3 - attempts} tentative${3 - attempts > 1 ? 's' : ''} restante${3 - attempts > 1 ? 's' : ''} avant blocage`
+              : `⚠️ ${3 - attempts} attempt${3 - attempts > 1 ? 's' : ''} left before lockout`}
+          </p>
+        )}
+
         <div className="flex justify-center">
-          <button onClick={handleSubmit} disabled={loading}
+          <button
+            onClick={handleSubmit}
+            disabled={loading || countdown > 0}
             className="bg-white text-[#FF7040] font-bold text-[14px] rounded-full px-6 py-2.5 active:scale-[1.03] transition-transform disabled:opacity-60">
-            {loading ? '...' : t('loginBtn')}
+            {loading     ? '...'
+             : countdown > 0 ? `🔒 ${countdown}s`
+             : t('loginBtn')}
           </button>
         </div>
         <p onClick={() => navigate('/')} className="text-white/75 text-[12px] text-center mt-4 cursor-pointer">{t('back')}</p>
