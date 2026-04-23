@@ -374,11 +374,25 @@ export default function Conseil() {
           <h1 className="text-white font-extrabold text-[18px]">
             {lang === 'fr' ? 'Besoin de parler ?' : 'Need to talk?'}
           </h1>
-          <p className="text-white/55 text-[10px] mt-0.5">
+          <p className="text-white/55 text-[10px] mt-0.5 mb-2">
             {lang === 'fr'
               ? 'Fiches conseil personnalisées · Basé sur ce que tu ressens'
               : 'Personalized advice cards · Based on how you feel'}
           </p>
+
+          {/* Bandeau avertissement + bouton mode crise */}
+          <div className="flex items-center gap-2 bg-white/15 border border-white/30 rounded-2xl px-3 py-2.5">
+            <p className="flex-1 text-white text-[10px] leading-snug text-left">
+              {lang === 'fr'
+                ? '⚕️ En cas de détresse grave ou d\'urgence médicale, consulte immédiatement un professionnel de santé.'
+                : '⚕️ In case of serious distress or medical emergency, seek professional help immediately.'}
+            </p>
+            <button
+              onClick={() => navigate('/crisis')}
+              className="flex-shrink-0 flex items-center gap-1 bg-white/25 border border-white/50 rounded-xl px-2.5 py-1.5 text-white font-bold text-[10px] active:scale-95 transition-transform">
+              🆘 {lang === 'fr' ? 'Crise' : 'Crisis'}
+            </button>
+          </div>
         </div>
 
         {/* Zone de chat */}
