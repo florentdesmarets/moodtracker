@@ -131,6 +131,40 @@ export default function About() {
           </div>
         </div>
 
+        {/* 📱 Réseaux sociaux */}
+        <div className="bg-white/15 rounded-3xl px-5 py-4 mb-3 slide-in">
+          <p className="text-white font-bold text-[13px] mb-1">
+            📱 {lang === 'fr' ? 'Me suivre sur les réseaux' : 'Follow me'}
+          </p>
+          <p className="text-white/70 text-[11px] leading-relaxed mb-3">
+            {lang === 'fr'
+              ? 'Actualités, conseils bien-être et coulisses de l\'app !'
+              : 'News, wellness tips and behind-the-scenes of the app!'}
+          </p>
+          <div className="flex flex-col gap-2">
+            <a href="https://www.instagram.com/moody_app_/"
+              target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-3 py-2.5 px-4 rounded-2xl bg-white no-underline active:scale-[0.98] transition-transform">
+              <span className="text-[22px] leading-none">📸</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-[13px] font-bold leading-tight" style={{ color: '#C13584' }}>Instagram</p>
+                <p className="text-[10px] text-[#aaa]">@moody_app_</p>
+              </div>
+              <span className="text-[#ccc] text-[13px] font-bold">↗</span>
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=61588683328174"
+              target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-3 py-2.5 px-4 rounded-2xl bg-white no-underline active:scale-[0.98] transition-transform">
+              <span className="text-[22px] leading-none">📘</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-[13px] font-bold leading-tight" style={{ color: '#1877f2' }}>Facebook</p>
+                <p className="text-[10px] text-[#aaa]">Moody App</p>
+              </div>
+              <span className="text-[#ccc] text-[13px] font-bold">↗</span>
+            </a>
+          </div>
+        </div>
+
         {/* 💌 Écris-moi un mot */}
         <div className="bg-white/15 rounded-3xl px-5 py-4 mb-3 slide-in">
           <p className="text-white font-bold text-[13px] mb-1">
