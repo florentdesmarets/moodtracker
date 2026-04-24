@@ -578,7 +578,11 @@ ${tagCorrelHTML}
               <p className="text-[11px] text-[#aaa] font-semibold uppercase tracking-wide">{t('langLabel')}</p>
               <p className="text-[14px] text-[#444] font-semibold">{t('langValue')}</p>
             </div>
-            <button onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
+            <button onClick={() => {
+              const newLang = lang === 'fr' ? 'en' : 'fr'
+              setLang(newLang)
+              handleSave('langue', newLang)
+            }}
               className="text-[12px] text-[#FF8040] font-bold bg-transparent border-none cursor-pointer">
               {lang === 'fr' ? '🇬🇧 EN' : '🇫🇷 FR'}
             </button>
