@@ -70,15 +70,22 @@ export default function Account() {
   const [badges,            setBadges]            = useState([])
   const [globalStats,       setGlobalStats]       = useState({ count: 0, streak: 0 })
 
+  // Sync depuis le profil dès qu'il est chargé (profile = null au premier render)
+  useEffect(() => {
+    if (!profile) return
+    setNotifActive(profile.notif_active ?? false)
+    setReminderTime(profile.reminder_time ?? '20:00')
+    // Reschedule la notification si active (timer SW perdu après rechargement)
+    if (profile.notif_active && profile.reminder_time && isNotificationGranted()) {
+      scheduleNotification(profile.reminder_time, lang)
+    }
+  }, [profile?.notif_active, profile?.reminder_time]) // eslint-disable-line
+
   useEffect(() => {
     fetchGlobalStats().then(stats => {
       setGlobalStats(stats)
       setBadges(computeBadges(stats))
     })
-    // Reschedule la notification si elle était active (timer perdu après rechargement)
-    if (profile?.notif_active && profile?.reminder_time && isNotificationGranted()) {
-      scheduleNotification(profile.reminder_time, lang)
-    }
   }, []) // eslint-disable-line
 
   async function handleToggleNotif(v) {
