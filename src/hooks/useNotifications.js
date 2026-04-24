@@ -32,8 +32,7 @@ export function cancelNotification() {
 }
 
 /**
- * Affiche une notification native directement (pas via SW).
- * Plus fiable sur desktop quand l'onglet est ouvert.
+ * Affiche une notification native via le Service Worker (plus fiable sur Chrome desktop).
  * Utilise localStorage pour ne déclencher qu'une fois par jour.
  */
 export function fireInAppNotification(lang = 'fr', force = false) {
@@ -47,13 +46,29 @@ export function fireInAppNotification(lang = 'fr', force = false) {
     ? 'How are you feeling today? 😊'
     : "Comment tu te sens aujourd'hui ? 😊"
 
+  const options = {
+    body,
+    icon: '/icons/web-app-manifest-192x192.png',
+    badge: '/icons/favicon-96x96.png',
+    tag: 'moody-daily',
+    renotify: true,
+    data: { url: '/mood' },
+  }
+
+  // Priorité : Service Worker showNotification (plus fiable sur Chrome desktop)
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready
+      .then(reg => reg.showNotification(title, options))
+      .catch(() => {
+        // Fallback : API Notification directe
+        try { new Notification(title, options) } catch (_) {}
+      })
+    return true
+  }
+
+  // Fallback sans SW
   try {
-    const notif = new Notification(title, {
-      body,
-      icon: '/icons/web-app-manifest-192x192.png',
-      badge: '/icons/favicon-96x96.png',
-      tag: 'moody-daily',
-    })
+    const notif = new Notification(title, options)
     notif.onclick = () => { window.focus(); window.location.href = '/mood' }
     return true
   } catch (_) { return false }

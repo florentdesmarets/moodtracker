@@ -1,4 +1,4 @@
-const CACHE = 'moody-3.4.0'
+const CACHE = 'moody-3.5.0'
 
 let notifTimer = null
 
@@ -33,6 +33,19 @@ self.addEventListener('fetch', e => {
   // Autres ressources : cache first, réseau en fallback
   e.respondWith(
     caches.match(e.request).then(cached => cached ?? fetch(e.request))
+  )
+})
+
+// ─── Clic sur la notification → ouvre / focus l'onglet /mood ─────────────────
+self.addEventListener('notificationclick', e => {
+  e.notification.close()
+  const target = e.notification.data?.url ?? '/mood'
+  e.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clients => {
+      const existing = clients.find(c => c.url.includes(target) || c.url.endsWith('/'))
+      if (existing) { existing.focus(); existing.navigate(target) }
+      else self.clients.openWindow(target)
+    })
   )
 })
 
