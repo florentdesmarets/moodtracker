@@ -287,7 +287,7 @@ export default function Mood() {
                         {entry?.emoji ?? ''}
                       </div>
                       <span className={`text-[9px] font-semibold ${isToday ? 'text-white' : 'text-white/45'}`}>
-                        {getDayLabel(date)}
+                        {isToday ? (lang === 'fr' ? "Auj." : 'Today') : getDayLabel(date)}
                       </span>
                     </div>
                   )
